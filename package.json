@@ -1,6 +1,6 @@
 {
-  "name": "with-typescript-eslint-jest",
-  "author": "@erikdstock",
+  "name": "blog",
+  "author": "umetsu",
   "license": "MIT",
   "version": "1.0.0",
   "scripts": {
@@ -11,6 +11,7 @@
     "format": "prettier --write **/*.{js,ts,tsx}",
     "lint": "eslint . --ext ts --ext tsx --ext js",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test-all": "yarn lint && yarn type-check && yarn test"
   },
   "husky": {
