@@ -1,21 +1,20 @@
-import { render } from '@testing-library/react'
-// import { ThemeProvider } from "my-ui-lib"
-// import { TranslationProvider } from "my-i18n-lib"
-// import defaultStrings from "i18n/en-x-default"
+import {
+  render as rtlRender,
+  RenderOptions as RtlRenderOptions,
+} from '@testing-library/react'
+import React, { ComponentType } from 'react'
 
-const Providers = ({ children }) => {
+function Providers({ children }: { children: React.ReactElement }) {
   return children
-  // return (
-  //   <ThemeProvider theme="light">
-  //     <TranslationProvider messages={defaultStrings}>
-  //       {children}
-  //     </TranslationProvider>
-  //   </ThemeProvider>
-  // )
 }
 
-const customRender = (ui, options = {}) =>
-  render(ui, { wrapper: Providers, ...options })
+type RenderOptions = RtlRenderOptions
+
+function customRender(ui: React.ReactElement, options: RenderOptions = {}) {
+  return {
+    ...rtlRender(ui, { wrapper: Providers as ComponentType, ...options }),
+  }
+}
 
 // re-export everything
 export * from '@testing-library/react'
