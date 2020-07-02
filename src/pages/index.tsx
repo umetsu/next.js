@@ -1,4 +1,18 @@
 import Head from 'next/head'
+import gql from 'graphql-tag'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const articlesQuery = gql`
+  query Articles {
+    articles(orderBy: publishedAt_DESC) {
+      id
+      slug
+      title
+      date
+      content
+    }
+  }
+`
 
 export const Home = (): JSX.Element => (
   <div className="container">
