@@ -3,6 +3,7 @@ import { Article, ArticlesQuery } from '../graphql/generated/types'
 import React from 'react'
 import { GetStaticProps } from 'next'
 import { fetchGraphCms } from '../graphql/server'
+import { Container, CardContent, Typography, Card } from '@material-ui/core'
 
 const articlesQuery = gql`
   query Articles {
@@ -41,11 +42,17 @@ type Props = {
 
 export function Home({ articles }: Props): JSX.Element {
   return (
-    <div>
+    <Container maxWidth={'md'}>
       {articles.map((article) => (
-        <div key={article.id}>{article.title}</div>
+        <Card key={article.id}>
+          <CardContent>
+            <Typography color="textSecondary" gutterBottom>
+              {article.title}
+            </Typography>
+          </CardContent>
+        </Card>
       ))}
-    </div>
+    </Container>
   )
 }
 

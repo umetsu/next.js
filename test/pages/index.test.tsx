@@ -4,7 +4,7 @@ import { Home } from '../../src/pages/index'
 
 describe('Home page', () => {
   it('matches snapshot', () => {
-    const { asFragment } = render(
+    const { getByText } = render(
       <Home
         articles={[
           {
@@ -17,6 +17,6 @@ describe('Home page', () => {
       />,
       {}
     )
-    expect(asFragment()).toMatchSnapshot()
+    getByText(/test title/i)
   })
 })
