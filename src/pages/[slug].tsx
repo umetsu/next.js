@@ -4,18 +4,7 @@ import { fetchGraphCms } from '../graphql/server'
 import { ArticleQuery, ArticleSlugsQuery } from '../graphql/generated/types'
 import React from 'react'
 import Layout from '../components/layout'
-import marked from 'marked'
-import highlightjs from 'highlight.js'
-import sanitize from 'sanitize-html'
-
-marked.setOptions({
-  highlight: (code, lang) => highlightjs.highlightAuto(code, [lang]).value,
-  sanitizer: sanitize,
-  pedantic: false,
-  gfm: true,
-  breaks: true,
-  silent: false,
-})
+import { parseMarkdown } from '../utils'
 
 const articleQuery = gql`
   query Article($slug: String) {
@@ -88,7 +77,7 @@ function ArticleDetailPage({ article }: Props): JSX.Element {
       {article?.content && (
         <div
           dangerouslySetInnerHTML={{
-            __html: marked(article.content),
+            __html: parseMarkdown(article.content),
           }}
         />
       )}
