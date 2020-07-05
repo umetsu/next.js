@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import { Article, ArticlesQuery } from '../graphql/generated/types'
+import { ArticlesQuery } from '../graphql/generated/types'
 import React from 'react'
 import { GetStaticProps } from 'next'
 import { fetchGraphCms } from '../graphql/server'
-import { CardContent, Typography, Card } from '@material-ui/core'
+import { Card, CardContent, Typography } from '@material-ui/core'
 import Link from 'next/link'
 import Layout from '../components/layout'
 
@@ -19,27 +19,19 @@ const articlesQuery = gql`
 `
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  try {
-    const {
-      data: { articles },
-    } = await fetchGraphCms<ArticlesQuery>(articlesQuery)
-    return {
-      props: {
-        articles: articles,
-      },
-    }
-  } catch (e) {
-    console.error(e)
-    return {
-      props: {
-        articles: [],
-      },
-    }
+  const {
+    data: { articles },
+  } = await fetchGraphCms<ArticlesQuery>(articlesQuery)
+
+  return {
+    props: {
+      articles: articles,
+    },
   }
 }
 
 type Props = {
-  articles: ReadonlyArray<Pick<Article, 'id' | 'slug' | 'title' | 'date'>>
+  articles: Readonly<ArticlesQuery['articles']>
 }
 
 export function Home({ articles }: Props): JSX.Element {

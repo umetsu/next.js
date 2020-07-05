@@ -1,13 +1,7 @@
 import gql from 'graphql-tag'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { fetchGraphCms } from '../graphql/server'
-import {
-  Article,
-  ArticleQuery,
-  ArticleSlugsQuery,
-  Asset,
-  Maybe,
-} from '../graphql/generated/types'
+import { ArticleQuery, ArticleSlugsQuery } from '../graphql/generated/types'
 import React from 'react'
 import Layout from '../components/layout'
 import marked from 'marked'
@@ -80,17 +74,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 type Props = {
-  article:
-    | (Pick<
-        Article,
-        'id' | 'slug' | 'title' | 'date' | 'tags' | 'excerpt' | 'content'
-      > & {
-        coverImage?: Maybe<
-          { __typename?: 'Asset' } & Pick<Asset, 'url' | 'width' | 'height'>
-        >
-      })
-    | null
-    | undefined
+  article: ArticleQuery['article']
 }
 
 function ArticleDetailPage({ article }: Props): JSX.Element {
@@ -106,7 +90,7 @@ function ArticleDetailPage({ article }: Props): JSX.Element {
           dangerouslySetInnerHTML={{
             __html: marked(article.content),
           }}
-        ></div>
+        />
       )}
     </Layout>
   )
