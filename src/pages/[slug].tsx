@@ -10,6 +10,18 @@ import {
 } from '../graphql/generated/types'
 import React from 'react'
 import Layout from '../components/layout'
+import marked from 'marked'
+import highlightjs from 'highlight.js'
+import sanitize from 'sanitize-html'
+
+marked.setOptions({
+  highlight: (code, lang) => highlightjs.highlightAuto(code, [lang]).value,
+  sanitizer: sanitize,
+  pedantic: false,
+  gfm: true,
+  breaks: true,
+  silent: false,
+})
 
 const articleQuery = gql`
   query Article($slug: String) {
@@ -89,7 +101,13 @@ function ArticleDetailPage({ article }: Props): JSX.Element {
       <div>{article?.date}</div>
       <div>{article?.excerpt}</div>
       <div>{article?.tags}</div>
-      <div>{article?.content}</div>
+      {article?.content && (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: marked(article.content),
+          }}
+        ></div>
+      )}
     </Layout>
   )
 }
