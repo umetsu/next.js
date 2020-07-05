@@ -1,8 +1,8 @@
+import React from 'react'
 import gql from 'graphql-tag'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { fetchGraphCms } from '../graphql/server'
+import { requestGraphCms } from '../graphql'
 import { ArticleQuery, ArticleSlugsQuery } from '../graphql/generated/types'
-import React from 'react'
 import Layout from '../components/layout'
 import { parseMarkdown } from '../utils'
 
@@ -17,7 +17,7 @@ const articleSlugsQuery = gql`
 export const getStaticPaths: GetStaticPaths = async () => {
   const {
     data: { articles },
-  } = await fetchGraphCms<ArticleSlugsQuery>(articleSlugsQuery)
+  } = await requestGraphCms<ArticleSlugsQuery>(articleSlugsQuery)
 
   return {
     paths: articles.flatMap((a) => ({ params: { slug: a.slug } })),
@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
 }) => {
   const {
     data: { article },
-  } = await fetchGraphCms<ArticleQuery>(articleQuery, {
+  } = await requestGraphCms<ArticleQuery>(articleQuery, {
     variables: {
       slug: slug,
     },

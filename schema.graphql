@@ -1,0 +1,2125 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"An object with an ID"
+interface Node {
+    "The id of the object."
+    id: ID!
+    "The Stage of an object"
+    stage: Stage!
+}
+
+type Aggregate {
+    count: Int!
+}
+
+type Article implements Node {
+    author: Author
+    content: String
+    coverImage: Asset
+    "The time the document was created"
+    createdAt: DateTime!
+    date: Date
+    "Get the document in other stages"
+    documentInStages(
+        "Decides if the current stage should be included or not"
+        includeCurrent: Boolean! = false,
+        "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+        inheritLocale: Boolean! = false,
+        "Potential stages that should be returned"
+        stages: [Stage!]! = [PUBLISHED, DRAFT]
+    ): [Article!]!
+    excerpt: String
+    "List of Article versions"
+    history(
+        limit: Int! = 10,
+        skip: Int! = 0,
+        "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+        stageOverride: Stage
+    ): [Version!]!
+    "The unique identifier"
+    id: ID!
+    "The time the document was published. Null on documents in draft stage."
+    publishedAt: DateTime
+    slug: String!
+    "System stage field"
+    stage: Stage!
+    stringTags: [String!]!
+    tags: [Tag!]!
+    title: String
+    "The time the document was updated"
+    updatedAt: DateTime!
+}
+
+"A connection to a list of items."
+type ArticleConnection {
+    aggregate: Aggregate!
+    "A list of edges."
+    edges: [ArticleEdge!]!
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type ArticleEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: Article!
+}
+
+"Asset system model"
+type Asset implements Node {
+    authorAvatar(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, where: AuthorWhereInput): [Author!]!
+    coverImageArticle(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrderByInput, skip: Int, where: ArticleWhereInput): [Article!]!
+    "The time the document was created"
+    createdAt(
+        "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
+        variation: SystemDateTimeFieldVariation! = COMBINED
+    ): DateTime!
+    "Get the document in other stages"
+    documentInStages(
+        "Decides if the current stage should be included or not"
+        includeCurrent: Boolean! = false,
+        "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+        inheritLocale: Boolean! = false,
+        "Potential stages that should be returned"
+        stages: [Stage!]! = [PUBLISHED, DRAFT]
+    ): [Asset!]!
+    "The file name"
+    fileName: String!
+    "The file handle"
+    handle: String!
+    "The height of the file"
+    height: Float
+    "List of Asset versions"
+    history(
+        limit: Int! = 10,
+        skip: Int! = 0,
+        "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+        stageOverride: Stage
+    ): [Version!]!
+    "The unique identifier"
+    id: ID!
+    "System Locale field"
+    locale: Locale!
+    "Get the other localizations for this document"
+    localizations(
+        "Decides if the current locale should be included or not"
+        includeCurrent: Boolean! = false,
+        "Potential locales that should be returned"
+        locales: [Locale!]! = [en]
+    ): [Asset!]!
+    "The mime type of the file"
+    mimeType: String
+    "The time the document was published. Null on documents in draft stage."
+    publishedAt(
+        "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
+        variation: SystemDateTimeFieldVariation! = COMBINED
+    ): DateTime
+    "The file size"
+    size: Float
+    "System stage field"
+    stage: Stage!
+    "The time the document was updated"
+    updatedAt(
+        "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
+        variation: SystemDateTimeFieldVariation! = COMBINED
+    ): DateTime!
+    "Get the url for the asset with provided transformations applied."
+    url(transformation: AssetTransformationInput): String!
+    "The file width"
+    width: Float
+}
+
+"A connection to a list of items."
+type AssetConnection {
+    aggregate: Aggregate!
+    "A list of edges."
+    edges: [AssetEdge!]!
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AssetEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: Asset!
+}
+
+type Author implements Node {
+    bibliography: String
+    "The time the document was created"
+    createdAt: DateTime!
+    "Get the document in other stages"
+    documentInStages(
+        "Decides if the current stage should be included or not"
+        includeCurrent: Boolean! = false,
+        "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+        inheritLocale: Boolean! = false,
+        "Potential stages that should be returned"
+        stages: [Stage!]! = [PUBLISHED, DRAFT]
+    ): [Author!]!
+    "List of Author versions"
+    history(
+        limit: Int! = 10,
+        skip: Int! = 0,
+        "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+        stageOverride: Stage
+    ): [Version!]!
+    "The unique identifier"
+    id: ID!
+    name: String
+    picture: Asset
+    posts(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrderByInput, skip: Int, where: ArticleWhereInput): [Article!]!
+    "The time the document was published. Null on documents in draft stage."
+    publishedAt: DateTime
+    "System stage field"
+    stage: Stage!
+    "The time the document was updated"
+    updatedAt: DateTime!
+}
+
+"A connection to a list of items."
+type AuthorConnection {
+    aggregate: Aggregate!
+    "A list of edges."
+    edges: [AuthorEdge!]!
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AuthorEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: Author!
+}
+
+type BatchPayload {
+    "The number of nodes that have been affected by the Batch operation."
+    count: Long!
+}
+
+"Representing a color value comprising of HEX, RGBA and css color values"
+type Color {
+    css: String!
+    hex: Hex!
+    rgba: RGBA!
+}
+
+type DocumentVersion {
+    createdAt: DateTime!
+    data: Json
+    id: ID!
+    revision: Int!
+    stage: Stage!
+}
+
+"Representing a geolocation point with latitude and longitude"
+type Location {
+    distance(from: LocationInput!): Float!
+    latitude: Float!
+    longitude: Float!
+}
+
+type Mutation {
+    "Create one article"
+    createArticle(data: ArticleCreateInput!): Article
+    "Create one asset"
+    createAsset(data: AssetCreateInput!): Asset @deprecated(reason : "Asset mutations will be overhauled soon")
+    "Create one author"
+    createAuthor(data: AuthorCreateInput!): Author
+    "Delete one article from _all_ existing stages. Returns deleted document."
+    deleteArticle(
+        "Document to delete"
+        where: ArticleWhereUniqueInput!
+    ): Article
+    "Delete one asset from _all_ existing stages. Returns deleted document."
+    deleteAsset(
+        "Document to delete"
+        where: AssetWhereUniqueInput!
+    ): Asset
+    "Delete one author from _all_ existing stages. Returns deleted document."
+    deleteAuthor(
+        "Document to delete"
+        where: AuthorWhereUniqueInput!
+    ): Author
+    "Delete many Article documents"
+    deleteManyArticles(
+        "Documents to delete"
+        where: ArticleManyWhereInput
+    ): BatchPayload!
+    "Delete many Asset documents"
+    deleteManyAssets(
+        "Documents to delete"
+        where: AssetManyWhereInput
+    ): BatchPayload!
+    "Delete many Author documents"
+    deleteManyAuthors(
+        "Documents to delete"
+        where: AuthorManyWhereInput
+    ): BatchPayload!
+    "Publish one article"
+    publishArticle(
+        "Publishing target stage"
+        to: [Stage!]! = [PUBLISHED],
+        "Document to publish"
+        where: ArticleWhereUniqueInput!
+    ): Article
+    "Publish one asset"
+    publishAsset(
+        "Optional localizations to publish"
+        locales: [Locale!],
+        "Publish base document including default localization and relations, as well as selected additional localizations. Returns document in mutation stage."
+        publishBase: Boolean = true,
+        "Publishing target stage"
+        to: [Stage!]! = [PUBLISHED],
+        "Document to publish"
+        where: AssetWhereUniqueInput!
+    ): Asset
+    "Publish one author"
+    publishAuthor(
+        "Publishing target stage"
+        to: [Stage!]! = [PUBLISHED],
+        "Document to publish"
+        where: AuthorWhereUniqueInput!
+    ): Author
+    "Publish many Article documents"
+    publishManyArticles(
+        "Stages to publish documents to"
+        to: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage to be published"
+        where: ArticleManyWhereInput
+    ): BatchPayload!
+    "Publish many Asset documents"
+    publishManyAssets(
+        "Document localizations to publish"
+        locales: [Locale!],
+        "Whether to publish the base document and default localization"
+        publishBase: Boolean = true,
+        "Stages to publish documents to"
+        to: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage to be published"
+        where: AssetManyWhereInput
+    ): BatchPayload!
+    "Publish many Author documents"
+    publishManyAuthors(
+        "Stages to publish documents to"
+        to: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage to be published"
+        where: AuthorManyWhereInput
+    ): BatchPayload!
+    "Unpublish one article from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    unpublishArticle(
+        "Stages to unpublish document from"
+        from: [Stage!]! = [PUBLISHED],
+        "Document to unpublish"
+        where: ArticleWhereUniqueInput!
+    ): Article
+    "Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    unpublishAsset(
+        "Stages to unpublish document from"
+        from: [Stage!]! = [PUBLISHED],
+        "Optional locales to unpublish. Unpublishing the default locale will completely remove the document from the selected stages"
+        locales: [Locale!],
+        "Unpublish complete document including default localization and relations from stages. Can be disabled."
+        unpublishBase: Boolean = true,
+        "Document to unpublish"
+        where: AssetWhereUniqueInput!
+    ): Asset
+    "Unpublish one author from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    unpublishAuthor(
+        "Stages to unpublish document from"
+        from: [Stage!]! = [PUBLISHED],
+        "Document to unpublish"
+        where: AuthorWhereUniqueInput!
+    ): Author
+    "Unpublish many Article documents"
+    unpublishManyArticles(
+        "Stages to unpublish documents from"
+        from: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage"
+        where: ArticleManyWhereInput
+    ): BatchPayload!
+    "Unpublish many Asset documents"
+    unpublishManyAssets(
+        "Stages to unpublish documents from"
+        from: [Stage!]! = [PUBLISHED],
+        "Locales to unpublish"
+        locales: [Locale!],
+        "Whether to unpublish the base document and default localization"
+        unpublishBase: Boolean = true,
+        "Identifies documents in each stage"
+        where: AssetManyWhereInput
+    ): BatchPayload!
+    "Unpublish many Author documents"
+    unpublishManyAuthors(
+        "Stages to unpublish documents from"
+        from: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage"
+        where: AuthorManyWhereInput
+    ): BatchPayload!
+    "Update one article"
+    updateArticle(data: ArticleUpdateInput!, where: ArticleWhereUniqueInput!): Article
+    "Update one asset"
+    updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
+    "Update one author"
+    updateAuthor(data: AuthorUpdateInput!, where: AuthorWhereUniqueInput!): Author
+    "Update many articles"
+    updateManyArticles(
+        "Updates to document content"
+        data: ArticleUpdateManyInput!,
+        "Documents to apply update on"
+        where: ArticleManyWhereInput
+    ): BatchPayload!
+    "Update many assets"
+    updateManyAssets(
+        "Updates to document content"
+        data: AssetUpdateManyInput!,
+        "Documents to apply update on"
+        where: AssetManyWhereInput
+    ): BatchPayload!
+    "Update many authors"
+    updateManyAuthors(
+        "Updates to document content"
+        data: AuthorUpdateManyInput!,
+        "Documents to apply update on"
+        where: AuthorManyWhereInput
+    ): BatchPayload!
+    "Upsert one article"
+    upsertArticle(upsert: ArticleUpsertInput!, where: ArticleWhereUniqueInput!): Article
+    "Upsert one asset"
+    upsertAsset(upsert: AssetUpsertInput!, where: AssetWhereUniqueInput!): Asset
+    "Upsert one author"
+    upsertAuthor(upsert: AuthorUpsertInput!, where: AuthorWhereUniqueInput!): Author
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+    "When paginating forwards, the cursor to continue."
+    endCursor: String
+    "When paginating forwards, are there more items?"
+    hasNextPage: Boolean!
+    "When paginating backwards, are there more items?"
+    hasPreviousPage: Boolean!
+    "When paginating backwards, the cursor to continue."
+    startCursor: String
+}
+
+type Query {
+    "Retrieve a single article"
+    article(stage: Stage! = PUBLISHED, where: ArticleWhereUniqueInput!): Article
+    "Retrieve document version"
+    articleVersion(where: VersionWhereInput!): DocumentVersion
+    "Retrieve multiple articles"
+    articles(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: ArticleWhereInput): [Article!]!
+    "Retrieve multiple articles using the Relay connection interface"
+    articlesConnection(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: ArticleWhereInput): ArticleConnection!
+    "Retrieve a single asset"
+    asset(
+        "First locale matched will be used based on the order of this input"
+        locales: [Locale!]! = [en],
+        stage: Stage! = PUBLISHED,
+        where: AssetWhereUniqueInput!
+    ): Asset
+    "Retrieve document version"
+    assetVersion(where: VersionWhereInput!): DocumentVersion
+    "Retrieve multiple assets"
+    assets(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        "First locale matched will be used based on the order of this input"
+        locales: [Locale!]! = [en],
+        orderBy: AssetOrderByInput,
+        skip: Int,
+        stage: Stage! = PUBLISHED,
+        where: AssetWhereInput
+    ): [Asset!]!
+    "Retrieve multiple assets using the Relay connection interface"
+    assetsConnection(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        "First locale matched will be used based on the order of this input"
+        locales: [Locale!]! = [en],
+        orderBy: AssetOrderByInput,
+        skip: Int,
+        stage: Stage! = PUBLISHED,
+        where: AssetWhereInput
+    ): AssetConnection!
+    "Retrieve a single author"
+    author(stage: Stage! = PUBLISHED, where: AuthorWhereUniqueInput!): Author
+    "Retrieve document version"
+    authorVersion(where: VersionWhereInput!): DocumentVersion
+    "Retrieve multiple authors"
+    authors(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: AuthorWhereInput): [Author!]!
+    "Retrieve multiple authors using the Relay connection interface"
+    authorsConnection(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: AuthorWhereInput): AuthorConnection!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!,
+        "First locale matched will be used based on the order of this input"
+        locales: [Locale!]! = [en],
+        stage: Stage! = PUBLISHED
+    ): Node
+}
+
+"Representing a RGBA color value: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba()"
+type RGBA {
+    a: RGBATransparency!
+    b: RGBAHue!
+    g: RGBAHue!
+    r: RGBAHue!
+}
+
+"Custom type representing a rich text value comprising of raw rich text ast, html, markdown and text values"
+type RichText {
+    "Returns HTMl representation"
+    html: String!
+    "Returns Markdown representation"
+    markdown: String!
+    "Returns AST representation"
+    raw: RichTextAST!
+    "Returns plain-text contents of RichText"
+    text: String!
+}
+
+type Version {
+    createdAt: DateTime!
+    id: ID!
+    revision: Int!
+    stage: Stage!
+}
+
+enum ArticleOrderByInput {
+    content_ASC
+    content_DESC
+    createdAt_ASC
+    createdAt_DESC
+    date_ASC
+    date_DESC
+    excerpt_ASC
+    excerpt_DESC
+    id_ASC
+    id_DESC
+    publishedAt_ASC
+    publishedAt_DESC
+    slug_ASC
+    slug_DESC
+    stringTags_ASC
+    stringTags_DESC
+    tags_ASC
+    tags_DESC
+    title_ASC
+    title_DESC
+    updatedAt_ASC
+    updatedAt_DESC
+}
+
+enum AssetOrderByInput {
+    createdAt_ASC
+    createdAt_DESC
+    fileName_ASC
+    fileName_DESC
+    handle_ASC
+    handle_DESC
+    height_ASC
+    height_DESC
+    id_ASC
+    id_DESC
+    mimeType_ASC
+    mimeType_DESC
+    publishedAt_ASC
+    publishedAt_DESC
+    size_ASC
+    size_DESC
+    updatedAt_ASC
+    updatedAt_DESC
+    width_ASC
+    width_DESC
+}
+
+enum AuthorOrderByInput {
+    bibliography_ASC
+    bibliography_DESC
+    createdAt_ASC
+    createdAt_DESC
+    id_ASC
+    id_DESC
+    name_ASC
+    name_DESC
+    publishedAt_ASC
+    publishedAt_DESC
+    updatedAt_ASC
+    updatedAt_DESC
+}
+
+enum DocumentFileTypes {
+    doc
+    docx
+    html
+    jpg
+    odp
+    ods
+    odt
+    pdf
+    png
+    ppt
+    pptx
+    svg
+    txt
+    webp
+    xls
+    xlsx
+}
+
+enum ImageFit {
+    "Resizes the image to fit within the specified parameters without distorting, cropping, or changing the aspect ratio."
+    clip
+    "Resizes the image to fit the specified parameters exactly by removing any parts of the image that don't fit within the boundaries."
+    crop
+    "Resizes the image to fit within the parameters, but as opposed to 'fit:clip' will not scale the image if the image is smaller than the output size."
+    max
+    "Resizes the image to fit the specified parameters exactly by scaling the image to the desired size. The aspect ratio of the image is not respected and the image can be distorted using this method."
+    scale
+}
+
+"Locale system enumeration"
+enum Locale {
+    "System locale"
+    en
+}
+
+"Stage system enumeration"
+enum Stage {
+    "System Draft Stage"
+    DRAFT
+    "System Published Stage"
+    PUBLISHED
+}
+
+enum SystemDateTimeFieldVariation {
+    BASE
+    COMBINED
+    LOCALIZATION
+}
+
+enum Tag {
+    GraphQL
+    React
+}
+
+enum _FilterKind {
+    AND
+    NOT
+    OR
+    contains
+    contains_all
+    contains_none
+    contains_some
+    ends_with
+    eq
+    eq_not
+    gt
+    gte
+    in
+    lt
+    lte
+    not_contains
+    not_ends_with
+    not_in
+    not_starts_with
+    relational_every
+    relational_none
+    relational_single
+    relational_some
+    search
+    starts_with
+}
+
+enum _MutationInputFieldKind {
+    enum
+    relation
+    richText
+    scalar
+    union
+    virtual
+}
+
+enum _MutationKind {
+    create
+    delete
+    deleteMany
+    publish
+    publishMany
+    unpublish
+    unpublishMany
+    update
+    updateMany
+    upsert
+}
+
+enum _OrderDirection {
+    asc
+    desc
+}
+
+enum _RelationInputCardinality {
+    many
+    one
+}
+
+enum _RelationInputKind {
+    create
+    update
+}
+
+enum _RelationKind {
+    regular
+    union
+}
+
+enum _SystemDateTimeFieldVariation {
+    base
+    combined
+    localization
+}
+
+input ArticleConnectInput {
+    "Allow to specify document position in list of connected documents, will default to appending at end of list"
+    position: ConnectPositionInput
+    "Document to connect"
+    where: ArticleWhereUniqueInput!
+}
+
+input ArticleCreateInput {
+    author: AuthorCreateOneInlineInput
+    content: String
+    coverImage: AssetCreateOneInlineInput
+    createdAt: DateTime
+    date: Date
+    excerpt: String
+    slug: String!
+    stringTags: [String!]
+    tags: [Tag!]
+    title: String
+    updatedAt: DateTime
+}
+
+input ArticleCreateManyInlineInput {
+    "Connect multiple existing Article documents"
+    connect: [ArticleWhereUniqueInput!]
+    "Create and connect multiple existing Article documents"
+    create: [ArticleCreateInput!]
+}
+
+input ArticleCreateOneInlineInput {
+    "Connect one existing Article document"
+    connect: ArticleWhereUniqueInput
+    "Create and connect one Article document"
+    create: ArticleCreateInput
+}
+
+"Identifies documents"
+input ArticleManyWhereInput {
+    "Logical AND on all given filters."
+    AND: [ArticleWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [ArticleWhereInput!]
+    "Logical OR on all given filters."
+    OR: [ArticleWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    author: AuthorWhereInput
+    content: String
+    "All values containing the given string."
+    content_contains: String
+    "All values ending with the given string."
+    content_ends_with: String
+    "All values that are contained in given list."
+    content_in: [String!]
+    "All values that are not equal to given value."
+    content_not: String
+    "All values not containing the given string."
+    content_not_contains: String
+    "All values not ending with the given string"
+    content_not_ends_with: String
+    "All values that are not contained in given list."
+    content_not_in: [String!]
+    "All values not starting with the given string."
+    content_not_starts_with: String
+    "All values starting with the given string."
+    content_starts_with: String
+    coverImage: AssetWhereInput
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    date: Date
+    "All values greater than the given value."
+    date_gt: Date
+    "All values greater than or equal the given value."
+    date_gte: Date
+    "All values that are contained in given list."
+    date_in: [Date!]
+    "All values less than the given value."
+    date_lt: Date
+    "All values less than or equal the given value."
+    date_lte: Date
+    "All values that are not equal to given value."
+    date_not: Date
+    "All values that are not contained in given list."
+    date_not_in: [Date!]
+    excerpt: String
+    "All values containing the given string."
+    excerpt_contains: String
+    "All values ending with the given string."
+    excerpt_ends_with: String
+    "All values that are contained in given list."
+    excerpt_in: [String!]
+    "All values that are not equal to given value."
+    excerpt_not: String
+    "All values not containing the given string."
+    excerpt_not_contains: String
+    "All values not ending with the given string"
+    excerpt_not_ends_with: String
+    "All values that are not contained in given list."
+    excerpt_not_in: [String!]
+    "All values not starting with the given string."
+    excerpt_not_starts_with: String
+    "All values starting with the given string."
+    excerpt_starts_with: String
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    slug: String
+    "All values containing the given string."
+    slug_contains: String
+    "All values ending with the given string."
+    slug_ends_with: String
+    "All values that are contained in given list."
+    slug_in: [String!]
+    "All values that are not equal to given value."
+    slug_not: String
+    "All values not containing the given string."
+    slug_not_contains: String
+    "All values not ending with the given string"
+    slug_not_ends_with: String
+    "All values that are not contained in given list."
+    slug_not_in: [String!]
+    "All values not starting with the given string."
+    slug_not_starts_with: String
+    "All values starting with the given string."
+    slug_starts_with: String
+    "Matches if the field array contains *all* items provided to the filter and order does match"
+    stringTags: [String!]
+    "Matches if the field array contains *all* items provided to the filter"
+    stringTags_contains_all: [String!]
+    "Matches if the field array does not contain any of the items provided to the filter"
+    stringTags_contains_none: [String!]
+    "Matches if the field array contains at least one item provided to the filter"
+    stringTags_contains_some: [String!]
+    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
+    stringTags_not: [String!]
+    "Matches if the field array contains *all* items provided to the filter and order does match"
+    tags: [Tag!]
+    "Matches if the field array contains *all* items provided to the filter"
+    tags_contains_all: [Tag!]
+    "Matches if the field array does not contain any of the items provided to the filter"
+    tags_contains_none: [Tag!]
+    "Matches if the field array contains at least one item provided to the filter"
+    tags_contains_some: [Tag!]
+    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
+    tags_not: [Tag!]
+    title: String
+    "All values containing the given string."
+    title_contains: String
+    "All values ending with the given string."
+    title_ends_with: String
+    "All values that are contained in given list."
+    title_in: [String!]
+    "All values that are not equal to given value."
+    title_not: String
+    "All values not containing the given string."
+    title_not_contains: String
+    "All values not ending with the given string"
+    title_not_ends_with: String
+    "All values that are not contained in given list."
+    title_not_in: [String!]
+    "All values not starting with the given string."
+    title_not_starts_with: String
+    "All values starting with the given string."
+    title_starts_with: String
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+}
+
+input ArticleUpdateInput {
+    author: AuthorUpdateOneInlineInput
+    content: String
+    coverImage: AssetUpdateOneInlineInput
+    date: Date
+    excerpt: String
+    slug: String
+    stringTags: [String!]
+    tags: [Tag!]
+    title: String
+}
+
+input ArticleUpdateManyInlineInput {
+    "Connect multiple existing Article documents"
+    connect: [ArticleConnectInput!]
+    "Create and connect multiple Article documents"
+    create: [ArticleCreateInput!]
+    "Delete multiple Article documents"
+    delete: [ArticleWhereUniqueInput!]
+    "Disconnect multiple Article documents"
+    disconnect: [ArticleWhereUniqueInput!]
+    "Override currently-connected documents with multiple existing Article documents"
+    set: [ArticleWhereUniqueInput!]
+    "Update multiple Article documents"
+    update: [ArticleUpdateWithNestedWhereUniqueInput!]
+    "Upsert multiple Article documents"
+    upsert: [ArticleUpsertWithNestedWhereUniqueInput!]
+}
+
+input ArticleUpdateManyInput {
+    content: String
+    createdAt: DateTime
+    date: Date
+    excerpt: String
+    stringTags: [String!]
+    tags: [Tag!]
+    title: String
+    updatedAt: DateTime
+}
+
+input ArticleUpdateManyWithNestedWhereInput {
+    "Update many input"
+    data: ArticleUpdateManyInput!
+    "Document search"
+    where: ArticleWhereInput!
+}
+
+input ArticleUpdateOneInlineInput {
+    "Connect existing Article document"
+    connect: ArticleWhereUniqueInput
+    "Create and connect one Article document"
+    create: ArticleCreateInput
+    "Delete currently connected Article document"
+    delete: Boolean
+    "Disconnect currently connected Article document"
+    disconnect: Boolean
+    "Update single Article document"
+    update: ArticleUpdateWithNestedWhereUniqueInput
+    "Upsert single Article document"
+    upsert: ArticleUpsertWithNestedWhereUniqueInput
+}
+
+input ArticleUpdateWithNestedWhereUniqueInput {
+    "Document to update"
+    data: ArticleUpdateInput!
+    "Unique document search"
+    where: ArticleWhereUniqueInput!
+}
+
+input ArticleUpsertInput {
+    "Create document if it didn't exist"
+    create: ArticleCreateInput!
+    "Update document if it exists"
+    update: ArticleUpdateInput!
+}
+
+input ArticleUpsertWithNestedWhereUniqueInput {
+    "Upsert data"
+    data: ArticleUpsertInput!
+    "Unique document search"
+    where: ArticleWhereUniqueInput!
+}
+
+"Identifies documents"
+input ArticleWhereInput {
+    "Logical AND on all given filters."
+    AND: [ArticleWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [ArticleWhereInput!]
+    "Logical OR on all given filters."
+    OR: [ArticleWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    author: AuthorWhereInput
+    content: String
+    "All values containing the given string."
+    content_contains: String
+    "All values ending with the given string."
+    content_ends_with: String
+    "All values that are contained in given list."
+    content_in: [String!]
+    "All values that are not equal to given value."
+    content_not: String
+    "All values not containing the given string."
+    content_not_contains: String
+    "All values not ending with the given string"
+    content_not_ends_with: String
+    "All values that are not contained in given list."
+    content_not_in: [String!]
+    "All values not starting with the given string."
+    content_not_starts_with: String
+    "All values starting with the given string."
+    content_starts_with: String
+    coverImage: AssetWhereInput
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    date: Date
+    "All values greater than the given value."
+    date_gt: Date
+    "All values greater than or equal the given value."
+    date_gte: Date
+    "All values that are contained in given list."
+    date_in: [Date!]
+    "All values less than the given value."
+    date_lt: Date
+    "All values less than or equal the given value."
+    date_lte: Date
+    "All values that are not equal to given value."
+    date_not: Date
+    "All values that are not contained in given list."
+    date_not_in: [Date!]
+    excerpt: String
+    "All values containing the given string."
+    excerpt_contains: String
+    "All values ending with the given string."
+    excerpt_ends_with: String
+    "All values that are contained in given list."
+    excerpt_in: [String!]
+    "All values that are not equal to given value."
+    excerpt_not: String
+    "All values not containing the given string."
+    excerpt_not_contains: String
+    "All values not ending with the given string"
+    excerpt_not_ends_with: String
+    "All values that are not contained in given list."
+    excerpt_not_in: [String!]
+    "All values not starting with the given string."
+    excerpt_not_starts_with: String
+    "All values starting with the given string."
+    excerpt_starts_with: String
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    slug: String
+    "All values containing the given string."
+    slug_contains: String
+    "All values ending with the given string."
+    slug_ends_with: String
+    "All values that are contained in given list."
+    slug_in: [String!]
+    "All values that are not equal to given value."
+    slug_not: String
+    "All values not containing the given string."
+    slug_not_contains: String
+    "All values not ending with the given string"
+    slug_not_ends_with: String
+    "All values that are not contained in given list."
+    slug_not_in: [String!]
+    "All values not starting with the given string."
+    slug_not_starts_with: String
+    "All values starting with the given string."
+    slug_starts_with: String
+    "Matches if the field array contains *all* items provided to the filter and order does match"
+    stringTags: [String!]
+    "Matches if the field array contains *all* items provided to the filter"
+    stringTags_contains_all: [String!]
+    "Matches if the field array does not contain any of the items provided to the filter"
+    stringTags_contains_none: [String!]
+    "Matches if the field array contains at least one item provided to the filter"
+    stringTags_contains_some: [String!]
+    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
+    stringTags_not: [String!]
+    "Matches if the field array contains *all* items provided to the filter and order does match"
+    tags: [Tag!]
+    "Matches if the field array contains *all* items provided to the filter"
+    tags_contains_all: [Tag!]
+    "Matches if the field array does not contain any of the items provided to the filter"
+    tags_contains_none: [Tag!]
+    "Matches if the field array contains at least one item provided to the filter"
+    tags_contains_some: [Tag!]
+    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
+    tags_not: [Tag!]
+    title: String
+    "All values containing the given string."
+    title_contains: String
+    "All values ending with the given string."
+    title_ends_with: String
+    "All values that are contained in given list."
+    title_in: [String!]
+    "All values that are not equal to given value."
+    title_not: String
+    "All values not containing the given string."
+    title_not_contains: String
+    "All values not ending with the given string"
+    title_not_ends_with: String
+    "All values that are not contained in given list."
+    title_not_in: [String!]
+    "All values not starting with the given string."
+    title_not_starts_with: String
+    "All values starting with the given string."
+    title_starts_with: String
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+}
+
+"References Article record uniquely"
+input ArticleWhereUniqueInput {
+    id: ID
+    slug: String
+}
+
+input AssetConnectInput {
+    "Allow to specify document position in list of connected documents, will default to appending at end of list"
+    position: ConnectPositionInput
+    "Document to connect"
+    where: AssetWhereUniqueInput!
+}
+
+input AssetCreateInput {
+    authorAvatar: AuthorCreateManyInlineInput
+    coverImageArticle: ArticleCreateManyInlineInput
+    createdAt: DateTime
+    fileName: String!
+    handle: String!
+    height: Float
+    "Inline mutations for managing document localizations excluding the default locale"
+    localizations: AssetCreateLocalizationsInput
+    mimeType: String
+    size: Float
+    updatedAt: DateTime
+    width: Float
+}
+
+input AssetCreateLocalizationDataInput {
+    createdAt: DateTime
+    fileName: String!
+    handle: String!
+    height: Float
+    mimeType: String
+    size: Float
+    updatedAt: DateTime
+    width: Float
+}
+
+input AssetCreateLocalizationInput {
+    "Localization input"
+    data: AssetCreateLocalizationDataInput!
+    locale: Locale!
+}
+
+input AssetCreateLocalizationsInput {
+    "Create localizations for the newly-created document"
+    create: [AssetCreateLocalizationInput!]
+}
+
+input AssetCreateManyInlineInput {
+    "Connect multiple existing Asset documents"
+    connect: [AssetWhereUniqueInput!]
+    "Create and connect multiple existing Asset documents"
+    create: [AssetCreateInput!]
+}
+
+input AssetCreateOneInlineInput {
+    "Connect one existing Asset document"
+    connect: AssetWhereUniqueInput
+    "Create and connect one Asset document"
+    create: AssetCreateInput
+}
+
+"Identifies documents"
+input AssetManyWhereInput {
+    "Logical AND on all given filters."
+    AND: [AssetWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AssetWhereInput!]
+    "Logical OR on all given filters."
+    OR: [AssetWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    authorAvatar_every: AuthorWhereInput
+    authorAvatar_none: AuthorWhereInput
+    authorAvatar_some: AuthorWhereInput
+    coverImageArticle_every: ArticleWhereInput
+    coverImageArticle_none: ArticleWhereInput
+    coverImageArticle_some: ArticleWhereInput
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+}
+
+"Transformations for Assets"
+input AssetTransformationInput {
+    document: DocumentTransformationInput
+    image: ImageTransformationInput
+    "Pass true if you want to validate the passed transformation parameters"
+    validateOptions: Boolean = false
+}
+
+input AssetUpdateInput {
+    authorAvatar: AuthorUpdateManyInlineInput
+    coverImageArticle: ArticleUpdateManyInlineInput
+    fileName: String
+    handle: String
+    height: Float
+    "Manage document localizations"
+    localizations: AssetUpdateLocalizationsInput
+    mimeType: String
+    size: Float
+    width: Float
+}
+
+input AssetUpdateLocalizationDataInput {
+    fileName: String
+    handle: String
+    height: Float
+    mimeType: String
+    size: Float
+    width: Float
+}
+
+input AssetUpdateLocalizationInput {
+    data: AssetUpdateLocalizationDataInput!
+    locale: Locale!
+}
+
+input AssetUpdateLocalizationsInput {
+    "Localizations to create"
+    create: [AssetCreateLocalizationInput!]
+    "Localizations to delete"
+    delete: [Locale!]
+    "Localizations to update"
+    update: [AssetUpdateLocalizationInput!]
+    upsert: [AssetUpsertLocalizationInput!]
+}
+
+input AssetUpdateManyInlineInput {
+    "Connect multiple existing Asset documents"
+    connect: [AssetConnectInput!]
+    "Create and connect multiple Asset documents"
+    create: [AssetCreateInput!]
+    "Delete multiple Asset documents"
+    delete: [AssetWhereUniqueInput!]
+    "Disconnect multiple Asset documents"
+    disconnect: [AssetWhereUniqueInput!]
+    "Override currently-connected documents with multiple existing Asset documents"
+    set: [AssetWhereUniqueInput!]
+    "Update multiple Asset documents"
+    update: [AssetUpdateWithNestedWhereUniqueInput!]
+    "Upsert multiple Asset documents"
+    upsert: [AssetUpsertWithNestedWhereUniqueInput!]
+}
+
+input AssetUpdateManyInput {
+    createdAt: DateTime
+    "Optional updates to localizations"
+    localizations: [AssetUpdateManyLocalizationInput!]
+    updatedAt: DateTime
+}
+
+input AssetUpdateManyLocalizationInput {
+    fileName: String!
+    height: Float
+    mimeType: String
+    size: Float
+    width: Float
+}
+
+input AssetUpdateManyWithNestedWhereInput {
+    "Update many input"
+    data: AssetUpdateManyInput!
+    "Document search"
+    where: AssetWhereInput!
+}
+
+input AssetUpdateOneInlineInput {
+    "Connect existing Asset document"
+    connect: AssetWhereUniqueInput
+    "Create and connect one Asset document"
+    create: AssetCreateInput
+    "Delete currently connected Asset document"
+    delete: Boolean
+    "Disconnect currently connected Asset document"
+    disconnect: Boolean
+    "Update single Asset document"
+    update: AssetUpdateWithNestedWhereUniqueInput
+    "Upsert single Asset document"
+    upsert: AssetUpsertWithNestedWhereUniqueInput
+}
+
+input AssetUpdateWithNestedWhereUniqueInput {
+    "Document to update"
+    data: AssetUpdateInput!
+    "Unique document search"
+    where: AssetWhereUniqueInput!
+}
+
+input AssetUpsertInput {
+    "Create document if it didn't exist"
+    create: AssetCreateInput!
+    "Update document if it exists"
+    update: AssetUpdateInput!
+}
+
+input AssetUpsertLocalizationInput {
+    create: AssetCreateLocalizationDataInput!
+    locale: Locale!
+    update: AssetUpdateLocalizationDataInput!
+}
+
+input AssetUpsertWithNestedWhereUniqueInput {
+    "Upsert data"
+    data: AssetUpsertInput!
+    "Unique document search"
+    where: AssetWhereUniqueInput!
+}
+
+"Identifies documents"
+input AssetWhereInput {
+    "Logical AND on all given filters."
+    AND: [AssetWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AssetWhereInput!]
+    "Logical OR on all given filters."
+    OR: [AssetWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    authorAvatar_every: AuthorWhereInput
+    authorAvatar_none: AuthorWhereInput
+    authorAvatar_some: AuthorWhereInput
+    coverImageArticle_every: ArticleWhereInput
+    coverImageArticle_none: ArticleWhereInput
+    coverImageArticle_some: ArticleWhereInput
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    fileName: String
+    "All values containing the given string."
+    fileName_contains: String
+    "All values ending with the given string."
+    fileName_ends_with: String
+    "All values that are contained in given list."
+    fileName_in: [String!]
+    "All values that are not equal to given value."
+    fileName_not: String
+    "All values not containing the given string."
+    fileName_not_contains: String
+    "All values not ending with the given string"
+    fileName_not_ends_with: String
+    "All values that are not contained in given list."
+    fileName_not_in: [String!]
+    "All values not starting with the given string."
+    fileName_not_starts_with: String
+    "All values starting with the given string."
+    fileName_starts_with: String
+    handle: String
+    "All values containing the given string."
+    handle_contains: String
+    "All values ending with the given string."
+    handle_ends_with: String
+    "All values that are contained in given list."
+    handle_in: [String!]
+    "All values that are not equal to given value."
+    handle_not: String
+    "All values not containing the given string."
+    handle_not_contains: String
+    "All values not ending with the given string"
+    handle_not_ends_with: String
+    "All values that are not contained in given list."
+    handle_not_in: [String!]
+    "All values not starting with the given string."
+    handle_not_starts_with: String
+    "All values starting with the given string."
+    handle_starts_with: String
+    height: Float
+    "All values greater than the given value."
+    height_gt: Float
+    "All values greater than or equal the given value."
+    height_gte: Float
+    "All values that are contained in given list."
+    height_in: [Float!]
+    "All values less than the given value."
+    height_lt: Float
+    "All values less than or equal the given value."
+    height_lte: Float
+    "All values that are not equal to given value."
+    height_not: Float
+    "All values that are not contained in given list."
+    height_not_in: [Float!]
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    mimeType: String
+    "All values containing the given string."
+    mimeType_contains: String
+    "All values ending with the given string."
+    mimeType_ends_with: String
+    "All values that are contained in given list."
+    mimeType_in: [String!]
+    "All values that are not equal to given value."
+    mimeType_not: String
+    "All values not containing the given string."
+    mimeType_not_contains: String
+    "All values not ending with the given string"
+    mimeType_not_ends_with: String
+    "All values that are not contained in given list."
+    mimeType_not_in: [String!]
+    "All values not starting with the given string."
+    mimeType_not_starts_with: String
+    "All values starting with the given string."
+    mimeType_starts_with: String
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    size: Float
+    "All values greater than the given value."
+    size_gt: Float
+    "All values greater than or equal the given value."
+    size_gte: Float
+    "All values that are contained in given list."
+    size_in: [Float!]
+    "All values less than the given value."
+    size_lt: Float
+    "All values less than or equal the given value."
+    size_lte: Float
+    "All values that are not equal to given value."
+    size_not: Float
+    "All values that are not contained in given list."
+    size_not_in: [Float!]
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+    width: Float
+    "All values greater than the given value."
+    width_gt: Float
+    "All values greater than or equal the given value."
+    width_gte: Float
+    "All values that are contained in given list."
+    width_in: [Float!]
+    "All values less than the given value."
+    width_lt: Float
+    "All values less than or equal the given value."
+    width_lte: Float
+    "All values that are not equal to given value."
+    width_not: Float
+    "All values that are not contained in given list."
+    width_not_in: [Float!]
+}
+
+"References Asset record uniquely"
+input AssetWhereUniqueInput {
+    id: ID
+}
+
+input AuthorConnectInput {
+    "Allow to specify document position in list of connected documents, will default to appending at end of list"
+    position: ConnectPositionInput
+    "Document to connect"
+    where: AuthorWhereUniqueInput!
+}
+
+input AuthorCreateInput {
+    bibliography: String
+    createdAt: DateTime
+    name: String
+    picture: AssetCreateOneInlineInput
+    posts: ArticleCreateManyInlineInput
+    updatedAt: DateTime
+}
+
+input AuthorCreateManyInlineInput {
+    "Connect multiple existing Author documents"
+    connect: [AuthorWhereUniqueInput!]
+    "Create and connect multiple existing Author documents"
+    create: [AuthorCreateInput!]
+}
+
+input AuthorCreateOneInlineInput {
+    "Connect one existing Author document"
+    connect: AuthorWhereUniqueInput
+    "Create and connect one Author document"
+    create: AuthorCreateInput
+}
+
+"Identifies documents"
+input AuthorManyWhereInput {
+    "Logical AND on all given filters."
+    AND: [AuthorWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AuthorWhereInput!]
+    "Logical OR on all given filters."
+    OR: [AuthorWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    bibliography: String
+    "All values containing the given string."
+    bibliography_contains: String
+    "All values ending with the given string."
+    bibliography_ends_with: String
+    "All values that are contained in given list."
+    bibliography_in: [String!]
+    "All values that are not equal to given value."
+    bibliography_not: String
+    "All values not containing the given string."
+    bibliography_not_contains: String
+    "All values not ending with the given string"
+    bibliography_not_ends_with: String
+    "All values that are not contained in given list."
+    bibliography_not_in: [String!]
+    "All values not starting with the given string."
+    bibliography_not_starts_with: String
+    "All values starting with the given string."
+    bibliography_starts_with: String
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    name: String
+    "All values containing the given string."
+    name_contains: String
+    "All values ending with the given string."
+    name_ends_with: String
+    "All values that are contained in given list."
+    name_in: [String!]
+    "All values that are not equal to given value."
+    name_not: String
+    "All values not containing the given string."
+    name_not_contains: String
+    "All values not ending with the given string"
+    name_not_ends_with: String
+    "All values that are not contained in given list."
+    name_not_in: [String!]
+    "All values not starting with the given string."
+    name_not_starts_with: String
+    "All values starting with the given string."
+    name_starts_with: String
+    picture: AssetWhereInput
+    posts_every: ArticleWhereInput
+    posts_none: ArticleWhereInput
+    posts_some: ArticleWhereInput
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+}
+
+input AuthorUpdateInput {
+    bibliography: String
+    name: String
+    picture: AssetUpdateOneInlineInput
+    posts: ArticleUpdateManyInlineInput
+}
+
+input AuthorUpdateManyInlineInput {
+    "Connect multiple existing Author documents"
+    connect: [AuthorConnectInput!]
+    "Create and connect multiple Author documents"
+    create: [AuthorCreateInput!]
+    "Delete multiple Author documents"
+    delete: [AuthorWhereUniqueInput!]
+    "Disconnect multiple Author documents"
+    disconnect: [AuthorWhereUniqueInput!]
+    "Override currently-connected documents with multiple existing Author documents"
+    set: [AuthorWhereUniqueInput!]
+    "Update multiple Author documents"
+    update: [AuthorUpdateWithNestedWhereUniqueInput!]
+    "Upsert multiple Author documents"
+    upsert: [AuthorUpsertWithNestedWhereUniqueInput!]
+}
+
+input AuthorUpdateManyInput {
+    bibliography: String
+    createdAt: DateTime
+    name: String
+    updatedAt: DateTime
+}
+
+input AuthorUpdateManyWithNestedWhereInput {
+    "Update many input"
+    data: AuthorUpdateManyInput!
+    "Document search"
+    where: AuthorWhereInput!
+}
+
+input AuthorUpdateOneInlineInput {
+    "Connect existing Author document"
+    connect: AuthorWhereUniqueInput
+    "Create and connect one Author document"
+    create: AuthorCreateInput
+    "Delete currently connected Author document"
+    delete: Boolean
+    "Disconnect currently connected Author document"
+    disconnect: Boolean
+    "Update single Author document"
+    update: AuthorUpdateWithNestedWhereUniqueInput
+    "Upsert single Author document"
+    upsert: AuthorUpsertWithNestedWhereUniqueInput
+}
+
+input AuthorUpdateWithNestedWhereUniqueInput {
+    "Document to update"
+    data: AuthorUpdateInput!
+    "Unique document search"
+    where: AuthorWhereUniqueInput!
+}
+
+input AuthorUpsertInput {
+    "Create document if it didn't exist"
+    create: AuthorCreateInput!
+    "Update document if it exists"
+    update: AuthorUpdateInput!
+}
+
+input AuthorUpsertWithNestedWhereUniqueInput {
+    "Upsert data"
+    data: AuthorUpsertInput!
+    "Unique document search"
+    where: AuthorWhereUniqueInput!
+}
+
+"Identifies documents"
+input AuthorWhereInput {
+    "Logical AND on all given filters."
+    AND: [AuthorWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AuthorWhereInput!]
+    "Logical OR on all given filters."
+    OR: [AuthorWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    bibliography: String
+    "All values containing the given string."
+    bibliography_contains: String
+    "All values ending with the given string."
+    bibliography_ends_with: String
+    "All values that are contained in given list."
+    bibliography_in: [String!]
+    "All values that are not equal to given value."
+    bibliography_not: String
+    "All values not containing the given string."
+    bibliography_not_contains: String
+    "All values not ending with the given string"
+    bibliography_not_ends_with: String
+    "All values that are not contained in given list."
+    bibliography_not_in: [String!]
+    "All values not starting with the given string."
+    bibliography_not_starts_with: String
+    "All values starting with the given string."
+    bibliography_starts_with: String
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    name: String
+    "All values containing the given string."
+    name_contains: String
+    "All values ending with the given string."
+    name_ends_with: String
+    "All values that are contained in given list."
+    name_in: [String!]
+    "All values that are not equal to given value."
+    name_not: String
+    "All values not containing the given string."
+    name_not_contains: String
+    "All values not ending with the given string"
+    name_not_ends_with: String
+    "All values that are not contained in given list."
+    name_not_in: [String!]
+    "All values not starting with the given string."
+    name_not_starts_with: String
+    "All values starting with the given string."
+    name_starts_with: String
+    picture: AssetWhereInput
+    posts_every: ArticleWhereInput
+    posts_none: ArticleWhereInput
+    posts_some: ArticleWhereInput
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+}
+
+"References Author record uniquely"
+input AuthorWhereUniqueInput {
+    id: ID
+}
+
+"Accepts either HEX or RGBA color value. At least one of hex or rgba value should be passed. If both are passed RGBA is used."
+input ColorInput {
+    hex: Hex
+    rgba: RGBAInput
+}
+
+input ConnectPositionInput {
+    "Connect document after specified document"
+    after: ID
+    "Connect document before specified document"
+    before: ID
+    "Connect document at last position"
+    end: Boolean
+    "Connect document at first position"
+    start: Boolean
+}
+
+input DocumentOutputInput {
+    """
+
+    Transforms a document into a desired file type.
+    See this matrix for format support:
+
+    PDF:    jpg, odp, ods, odt, png, svg, txt, and webp
+    DOC:    docx, html, jpg, odt, pdf, png, svg, txt, and webp
+    DOCX:    doc, html, jpg, odt, pdf, png, svg, txt, and webp
+    ODT:    doc, docx, html, jpg, pdf, png, svg, txt, and webp
+    XLS:    jpg, pdf, ods, png, svg, xlsx, and webp
+    XLSX:    jpg, pdf, ods, png, svg, xls, and webp
+    ODS:    jpg, pdf, png, xls, svg, xlsx, and webp
+    PPT:    jpg, odp, pdf, png, svg, pptx, and webp
+    PPTX:    jpg, odp, pdf, png, svg, ppt, and webp
+    ODP:    jpg, pdf, png, ppt, svg, pptx, and webp
+    BMP:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    GIF:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    JPG:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    PNG:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    WEBP:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    TIFF:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    AI:        jpg, odp, ods, odt, pdf, png, svg, and webp
+    PSD:    jpg, odp, ods, odt, pdf, png, svg, and webp
+    SVG:    jpg, odp, ods, odt, pdf, png, and webp
+    HTML:    jpg, odt, pdf, svg, txt, and webp
+    TXT:    jpg, html, odt, pdf, svg, and webp
+    """
+    format: DocumentFileTypes
+}
+
+"Transformations for Documents"
+input DocumentTransformationInput {
+    "Changes the output for the file."
+    output: DocumentOutputInput
+}
+
+input ImageResizeInput {
+    "The default value for the fit parameter is fit:clip."
+    fit: ImageFit
+    "The height in pixels to resize the image to. The value must be an integer from 1 to 10000."
+    height: Int
+    "The width in pixels to resize the image to. The value must be an integer from 1 to 10000."
+    width: Int
+}
+
+"Transformations for Images"
+input ImageTransformationInput {
+    "Resizes the image"
+    resize: ImageResizeInput
+}
+
+"Input for a geolocation point with latitude and longitude"
+input LocationInput {
+    latitude: Float!
+    longitude: Float!
+}
+
+input PublishLocaleInput {
+    "Locales to publish"
+    locale: Locale!
+    "Stages to publish selected locales to"
+    stages: [Stage!]!
+}
+
+"Input type representing a RGBA color value: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba()"
+input RGBAInput {
+    a: RGBATransparency!
+    b: RGBAHue!
+    g: RGBAHue!
+    r: RGBAHue!
+}
+
+input UnpublishLocaleInput {
+    "Locales to unpublish"
+    locale: Locale!
+    "Stages to unpublish selected locales from"
+    stages: [Stage!]!
+}
+
+input VersionWhereInput {
+    id: ID!
+    revision: Int!
+    stage: Stage!
+}
+
+
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
+scalar DateTime
+
+"Slate-compatible RichText AST"
+scalar RichTextAST
+
+scalar Hex
+
+scalar RGBATransparency
+
+"A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar."
+scalar Date
+
+"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long
+
+scalar RGBAHue
+
+"Raw JSON value"
+scalar Json
