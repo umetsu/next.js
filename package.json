@@ -33,7 +33,7 @@
   "dependencies": {
     "@material-ui/core": "4.11.0",
     "@testing-library/jest-dom": "5.11.0",
-    "graphql": "15.2.0",
+    "graphql": "15.3.0",
     "graphql-tag": "2.10.3",
     "next": "latest",
     "react": "16.13.1",
