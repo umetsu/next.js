@@ -9,7 +9,7 @@ import {
   Maybe,
 } from '../graphql/generated/types'
 import React from 'react'
-import { Container } from '@material-ui/core'
+import Layout from '../components/layout'
 
 const articleQuery = gql`
   query Article($slug: String) {
@@ -83,14 +83,14 @@ type Props = {
 
 function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
-    <Container maxWidth={'md'}>
+    <Layout>
       <img src={article?.coverImage?.url} />
       <div>{article?.title}</div>
       <div>{article?.date}</div>
       <div>{article?.excerpt}</div>
       <div>{article?.tags}</div>
       <div>{article?.content}</div>
-    </Container>
+    </Layout>
   )
 }
 
