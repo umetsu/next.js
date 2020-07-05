@@ -1,7 +1,7 @@
 import { DocumentNode } from 'graphql'
 import { print } from 'graphql/language/printer'
 
-export async function fetchGraphCms<Query>(
+export async function requestGraphCms<Query>(
   query: DocumentNode,
   { variables }: { variables: any } = {
     variables: {},

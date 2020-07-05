@@ -1,8 +1,8 @@
+import React from 'react'
 import gql from 'graphql-tag'
 import { ArticlesQuery } from '../graphql/generated/types'
-import React from 'react'
 import { GetStaticProps } from 'next'
-import { fetchGraphCms } from '../graphql/server'
+import { requestGraphCms } from '../graphql'
 import { Card, CardContent, Typography } from '@material-ui/core'
 import Link from 'next/link'
 import Layout from '../components/layout'
@@ -21,7 +21,7 @@ const articlesQuery = gql`
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const {
     data: { articles },
-  } = await fetchGraphCms<ArticlesQuery>(articlesQuery)
+  } = await requestGraphCms<ArticlesQuery>(articlesQuery)
 
   return {
     props: {
