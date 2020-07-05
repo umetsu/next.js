@@ -6,6 +6,25 @@ import React from 'react'
 import Layout from '../components/layout'
 import { parseMarkdown } from '../utils'
 
+const articleSlugsQuery = gql`
+  query ArticleSlugs {
+    articles(orderBy: publishedAt_DESC) {
+      slug
+    }
+  }
+`
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const {
+    data: { articles },
+  } = await fetchGraphCms<ArticleSlugsQuery>(articleSlugsQuery)
+
+  return {
+    paths: articles.flatMap((a) => ({ params: { slug: a.slug } })),
+    fallback: false,
+  }
+}
+
 const articleQuery = gql`
   query Article($slug: String) {
     article(where: { slug: $slug }) {
@@ -40,25 +59,6 @@ export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
     props: {
       article: article,
     },
-  }
-}
-
-const articleSlugsQuery = gql`
-  query ArticleSlugs {
-    articles(orderBy: publishedAt_DESC) {
-      slug
-    }
-  }
-`
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const {
-    data: { articles },
-  } = await fetchGraphCms<ArticleSlugsQuery>(articleSlugsQuery)
-
-  return {
-    paths: articles.flatMap((a) => ({ params: { slug: a.slug } })),
-    fallback: false,
   }
 }
 
