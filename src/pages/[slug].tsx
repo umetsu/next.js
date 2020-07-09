@@ -1,23 +1,20 @@
 import React from 'react'
-import gql from 'graphql-tag'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { requestGraphCms } from '../graphql'
-import { ArticleQuery, ArticleSlugsQuery } from '../graphql/generated/types'
 import Layout from '../components/layout'
 import { parseMarkdown } from '../utils'
-
-const articleSlugsQuery = gql`
-  query ArticleSlugs {
-    articles(orderBy: publishedAt_DESC) {
-      slug
-    }
-  }
-`
+import { initEnvironment } from '../graphql/relay'
+import { fetchQuery } from 'react-relay'
+import {
+  ArticleQuery,
+  ArticleQueryResponse,
+} from '../graphql/__generated__/ArticleQuery.graphql'
+import { articleQuery } from '../graphql/queries/ArticleQuery'
+import { SlugsQuery } from '../graphql/__generated__/SlugsQuery.graphql'
+import { slugsQuery } from '../graphql/queries/SlugsQuery'
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const {
-    data: { articles },
-  } = await requestGraphCms<ArticleSlugsQuery>(articleSlugsQuery)
+  const environment = initEnvironment()
+  const { articles } = await fetchQuery<SlugsQuery>(environment, slugsQuery, {})
 
   return {
     paths: articles.flatMap((a) => ({ params: { slug: a.slug } })),
@@ -25,45 +22,27 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-const articleQuery = gql`
-  query Article($slug: String) {
-    article(where: { slug: $slug }) {
-      id
-      slug
-      title
-      date
-      coverImage {
-        url
-        width
-        height
-      }
-      tags
-      excerpt
-      content
-    }
-  }
-`
-
 export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
   params: { slug } = { slug: '' },
 }) => {
-  const {
-    data: { article },
-  } = await requestGraphCms<ArticleQuery>(articleQuery, {
-    variables: {
-      slug: slug,
-    },
-  })
+  const environment = initEnvironment()
+  const { article } = await fetchQuery<ArticleQuery>(
+    environment,
+    articleQuery,
+    { slug }
+  )
+  const initialRecords = environment.getStore().getSource().toJSON()
 
   return {
     props: {
-      article: article,
+      article,
+      initialRecords,
     },
   }
 }
 
 type Props = {
-  article: ArticleQuery['article']
+  article: ArticleQueryResponse['article']
 }
 
 function ArticleDetailPage({ article }: Props): JSX.Element {
@@ -71,7 +50,7 @@ function ArticleDetailPage({ article }: Props): JSX.Element {
     <Layout>
       <img src={article?.coverImage?.url} />
       <div>{article?.title}</div>
-      <div>{article?.date}</div>
+      {typeof article?.date === 'string' && <div>{article.date}</div>}
       <div>{article?.excerpt}</div>
       <div>{article?.tags}</div>
       {article?.content && (
