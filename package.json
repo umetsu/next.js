@@ -14,7 +14,7 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test-all": "yarn lint && yarn type-check && yarn test",
-    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen": "relay-compiler",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -33,19 +33,16 @@
   "dependencies": {
     "@material-ui/core": "4.11.0",
     "graphql": "15.3.0",
-    "graphql-tag": "2.10.3",
     "highlight.js": "10.1.1",
     "marked": "1.1.0",
     "next": "latest",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-relay": "^9.1.0",
     "sanitize-html": "1.27.0"
   },
   "devDependencies": {
     "@babel/core": "7.10.4",
-    "@graphql-codegen/cli": "1.16.2",
-    "@graphql-codegen/typescript": "1.16.2",
-    "@graphql-codegen/typescript-operations": "1.16.2",
     "@storybook/addon-actions": "5.3.19",
     "@storybook/addon-links": "5.3.19",
     "@storybook/addons": "5.3.19",
@@ -57,12 +54,14 @@
     "@types/marked": "1.1.0",
     "@types/node": "13.13.12",
     "@types/react": "16.9.41",
+    "@types/react-relay": "^7.0.8",
     "@types/sanitize-html": "1.23.3",
     "@types/testing-library__react": "10.2.0",
     "@typescript-eslint/eslint-plugin": "3.5.0",
     "@typescript-eslint/parser": "3.5.0",
     "babel-jest": "26.1.0",
     "babel-loader": "8.1.0",
+    "babel-plugin-relay": "^9.1.0",
     "babel-preset-react-app": "9.1.2",
     "eslint": "7.4.0",
     "eslint-config-prettier": "6.11.0",
@@ -73,6 +72,9 @@
     "jest-watch-typeahead": "0.6.0",
     "lint-staged": "10.2.11",
     "prettier": "2.0.5",
+    "relay-compiler": "^9.1.0",
+    "relay-compiler-language-typescript": "^12.0.3",
+    "relay-config": "^9.1.0",
     "typescript": "3.9.6"
   }
 }

@@ -1,37 +1,35 @@
 import React from 'react'
-import gql from 'graphql-tag'
-import { ArticlesQuery } from '../graphql/generated/types'
 import { GetStaticProps } from 'next'
-import { requestGraphCms } from '../graphql'
 import { Card, CardContent, Typography } from '@material-ui/core'
 import Link from 'next/link'
 import Layout from '../components/layout'
-
-const articlesQuery = gql`
-  query Articles {
-    articles(orderBy: publishedAt_DESC) {
-      id
-      slug
-      title
-      date
-    }
-  }
-`
+import { initEnvironment } from '../graphql/relay'
+import { articlesQuery } from '../graphql/queries/ArticlesQuery'
+import { fetchQuery } from 'react-relay'
+import {
+  ArticlesQuery,
+  ArticlesQueryResponse,
+} from '../graphql/__generated__/ArticlesQuery.graphql'
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const {
-    data: { articles },
-  } = await requestGraphCms<ArticlesQuery>(articlesQuery)
+  const environment = initEnvironment()
+  const { articles } = await fetchQuery<ArticlesQuery>(
+    environment,
+    articlesQuery,
+    {}
+  )
+  const initialRecords = environment.getStore().getSource().toJSON()
 
   return {
     props: {
-      articles: articles,
+      articles,
+      initialRecords,
     },
   }
 }
 
 type Props = {
-  articles: Readonly<ArticlesQuery['articles']>
+  articles: ArticlesQueryResponse['articles']
 }
 
 export function Home({ articles }: Props): JSX.Element {
