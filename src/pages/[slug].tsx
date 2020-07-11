@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import Layout from '../components/layout'
 import { parseMarkdown } from '../utils'
 import { initEnvironment } from '../graphql/relay'
-import { fetchQuery } from 'react-relay'
+import { fetchQuery } from 'relay-runtime'
 import {
   ArticleQuery,
   ArticleQueryResponse,

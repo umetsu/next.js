@@ -1,13 +1,22 @@
-// https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js
+// https://github.com/htsh-tsyk/nextjs-relay-hook-ssg-examples/blob/master/with-relay-experimental/lib/relay.ts
 import { useMemo } from 'react'
-import { Environment, Network, RecordSource, Store } from 'relay-runtime'
+import {
+  Environment,
+  Network,
+  RecordSource,
+  RequestParameters,
+  Store,
+  Variables,
+} from 'relay-runtime'
+import RelayModernEnvironment from 'relay-runtime/lib/store/RelayModernEnvironment'
+import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes'
 
 let relayEnvironment: Environment
 
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise
-function fetchQuery(operation: any, variables: any) {
-  return fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT!, {
+async function fetchQuery(operation: RequestParameters, variables: Variables) {
+  const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT!, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -17,20 +26,23 @@ function fetchQuery(operation: any, variables: any) {
       query: operation.text, // GraphQL text from input
       variables,
     }),
-  }).then((response) => response.json())
+  })
+  return response.json()
 }
 
-function createEnvironment(initialRecords: any): Environment {
+function createEnvironment(): Environment {
   return new Environment({
     // Create a network layer from the fetch function
     network: Network.create(fetchQuery),
-    store: new Store(new RecordSource(initialRecords)),
+    store: new Store(new RecordSource()),
   })
 }
 
-export function initEnvironment(initialRecords?: any) {
+export function initEnvironment(
+  initialRecords: RecordMap = {}
+): RelayModernEnvironment {
   // Create a network layer from the fetch function
-  const environment = relayEnvironment ?? createEnvironment(initialRecords)
+  const environment = relayEnvironment ?? createEnvironment()
 
   // If your page has Next.js data fetching methods that use Relay, the initial records
   // will get hydrated here
@@ -45,6 +57,8 @@ export function initEnvironment(initialRecords?: any) {
   return relayEnvironment
 }
 
-export function useEnvironment(initialRecords: any) {
+export function useEnvironment(
+  initialRecords: RecordMap
+): RelayModernEnvironment {
   return useMemo(() => initEnvironment(initialRecords), [initialRecords])
 }
