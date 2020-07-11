@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Layout from '../components/layout'
 import { initEnvironment } from '../graphql/relay'
 import { articlesQuery } from '../graphql/queries/ArticlesQuery'
-import { fetchQuery } from 'react-relay'
+import { fetchQuery } from 'relay-runtime'
 import {
   ArticlesQuery,
   ArticlesQueryResponse,
