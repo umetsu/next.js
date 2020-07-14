@@ -73,7 +73,7 @@
     "jest-watch-typeahead": "0.6.0",
     "lint-staged": "10.2.11",
     "prettier": "2.0.5",
-    "relay-compiler": "9.1.0",
+    "relay-compiler": "10.0.0",
     "relay-compiler-language-typescript": "12.0.3",
     "relay-config": "10.0.0",
     "typescript": "3.9.6"
