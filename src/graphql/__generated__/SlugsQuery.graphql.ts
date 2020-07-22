@@ -22,7 +22,9 @@ query SlugsQuery {
 }
 */
 
-const node: ConcreteRequest = (function () {
+// FIXME: 自動生成されたコードの型が合わない
+//  const node: ConcreteRequest = (function () {
+const node = (function () {
   var v0 = [
       {
         kind: 'Literal',
@@ -56,6 +58,7 @@ const node: ConcreteRequest = (function () {
         },
       ],
       type: 'Query',
+      abstractKey: null,
     },
     kind: 'Request',
     operation: {
@@ -85,6 +88,7 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
+      cacheID: 'fc4ec38338f84641932e6944d47750f2',
       id: null,
       metadata: {},
       name: 'SlugsQuery',

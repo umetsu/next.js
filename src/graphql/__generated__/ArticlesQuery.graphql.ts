@@ -27,7 +27,9 @@ query ArticlesQuery {
 }
 */
 
-const node: ConcreteRequest = (function () {
+// FIXME: 自動生成されたコードの型が合わない
+//  const node: ConcreteRequest = (function () {
+const node = (function () {
   var v0 = [
     {
       alias: null,
@@ -83,6 +85,7 @@ const node: ConcreteRequest = (function () {
       name: 'ArticlesQuery',
       selections: v0 /*: any*/,
       type: 'Query',
+      abstractKey: null,
     },
     kind: 'Request',
     operation: {
@@ -92,6 +95,7 @@ const node: ConcreteRequest = (function () {
       selections: v0 /*: any*/,
     },
     params: {
+      cacheID: 'db736166463b66f71cb701549262a473',
       id: null,
       metadata: {},
       name: 'ArticlesQuery',

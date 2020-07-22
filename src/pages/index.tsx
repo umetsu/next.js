@@ -30,6 +30,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 type Props = {
   articles: ArticlesQueryResponse['articles']
+  initialRecords?: { [p: string]: Record<any, any> }
 }
 
 export function Home({ articles }: Props): JSX.Element {
