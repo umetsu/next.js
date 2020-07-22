@@ -8,6 +8,14 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
   const { initialRecords, ...rest } = pageProps
   const environment = useEnvironment(initialRecords)
 
+  React.useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side')
+    if (jssStyles) {
+      jssStyles.parentElement?.removeChild(jssStyles)
+    }
+  }, [])
+
   return (
     <RelayEnvironmentProvider environment={environment}>
       <Component {...rest} />
