@@ -77,6 +77,6 @@
     "relay-compiler": "10.0.0",
     "relay-compiler-language-typescript": "12.0.3",
     "relay-config": "10.0.0",
-    "typescript": "3.9.6"
+    "typescript": "3.9.7"
   }
 }
