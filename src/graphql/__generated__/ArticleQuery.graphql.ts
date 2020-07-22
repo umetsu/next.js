@@ -49,13 +49,14 @@ query ArticleQuery(
 }
 */
 
-const node: ConcreteRequest = (function () {
+// FIXME: 自動生成されたコードの型が合わない
+//  const node: ConcreteRequest = (function () {
+const node = (function () {
   var v0 = [
       {
         defaultValue: null,
         kind: 'LocalArgument',
         name: 'slug',
-        type: 'String',
       },
     ],
     v1 = [
@@ -178,6 +179,7 @@ const node: ConcreteRequest = (function () {
         },
       ],
       type: 'Query',
+      abstractKey: null,
     },
     kind: 'Request',
     operation: {
@@ -221,6 +223,7 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
+      cacheID: '05c38b05b0e94b674ac6dc4241c3ed41',
       id: null,
       metadata: {},
       name: 'ArticleQuery',
