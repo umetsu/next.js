@@ -2,7 +2,7 @@ import { AppProps } from 'next/app'
 import React from 'react'
 import 'highlight.js/styles/vs2015.css'
 import { useEnvironment } from '../graphql/relay'
-import { RelayEnvironmentProvider } from 'relay-hooks/lib'
+import { RelayEnvironmentProvider } from 'react-relay/hooks'
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
   const { initialRecords, ...rest } = pageProps
