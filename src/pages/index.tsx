@@ -1,7 +1,5 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
-import { Card, CardContent, Typography } from '@material-ui/core'
-import Link from 'next/link'
 import Layout from '../components/layout'
 import { initEnvironment } from '../graphql/relay'
 import { articlesQuery } from '../graphql/queries/ArticlesQuery'
@@ -10,10 +8,11 @@ import {
   ArticlesQuery,
   ArticlesQueryResponse,
 } from '../graphql/__generated__/ArticlesQuery.graphql'
+import ArticleList from '../components/ArticleList'
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const environment = initEnvironment()
-  const { articles } = await fetchQuery<ArticlesQuery>(
+  const response = await fetchQuery<ArticlesQuery>(
     environment,
     articlesQuery,
     {}
@@ -22,33 +21,21 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
   return {
     props: {
-      articles,
+      articlesQueryResponse: response,
       initialRecords,
     },
   }
 }
 
 type Props = {
-  articles: ArticlesQueryResponse['articles']
+  articlesQueryResponse: ArticlesQueryResponse
   initialRecords?: { [p: string]: Record<any, any> }
 }
 
-export function Home({ articles }: Props): JSX.Element {
+export function Home({ articlesQueryResponse }: Props): JSX.Element {
   return (
     <Layout>
-      {articles.map((article) => (
-        <Card key={article.id}>
-          <CardContent>
-            <Link href={'/[slug]'} as={`/${article.slug}`}>
-              <a>
-                <Typography color="textSecondary" gutterBottom>
-                  {article.title}
-                </Typography>
-              </a>
-            </Link>
-          </CardContent>
-        </Card>
-      ))}
+      <ArticleList fragmentRef={articlesQueryResponse} />
     </Layout>
   )
 }
