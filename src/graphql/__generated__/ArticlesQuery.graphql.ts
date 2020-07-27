@@ -22,6 +22,8 @@ fragment ArticleItemFragment on Article {
   slug
   title
   date
+  tags
+  excerpt
 }
 
 fragment ArticleListFragment on Query {
@@ -98,19 +100,33 @@ const node = {
             name: 'date',
             storageKey: null,
           },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'tags',
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'excerpt',
+            storageKey: null,
+          },
         ],
         storageKey: 'articles(orderBy:"publishedAt_DESC")',
       },
     ],
   },
   params: {
-    cacheID: '1166519e036a6820d8da13a5d6d14cb3',
+    cacheID: '6250cc9cc666031617d7dc5708791474',
     id: null,
     metadata: {},
     name: 'ArticlesQuery',
     operationKind: 'query',
     text:
-      'query ArticlesQuery {\n  ...ArticleListFragment\n}\n\nfragment ArticleItemFragment on Article {\n  id\n  slug\n  title\n  date\n}\n\nfragment ArticleListFragment on Query {\n  articles(orderBy: publishedAt_DESC) {\n    ...ArticleItemFragment\n    id\n  }\n}\n',
+      'query ArticlesQuery {\n  ...ArticleListFragment\n}\n\nfragment ArticleItemFragment on Article {\n  id\n  slug\n  title\n  date\n  tags\n  excerpt\n}\n\nfragment ArticleListFragment on Query {\n  articles(orderBy: publishedAt_DESC) {\n    ...ArticleItemFragment\n    id\n  }\n}\n',
   },
 }
 ;(node as any).hash = '6e03e7f2c9708685b2f688acb2d9db4e'

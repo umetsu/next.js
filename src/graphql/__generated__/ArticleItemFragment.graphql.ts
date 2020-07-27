@@ -8,6 +8,8 @@ export type ArticleItemFragment = {
   readonly slug: string
   readonly title: string | null
   readonly date: unknown | null
+  readonly tags: ReadonlyArray<string>
+  readonly excerpt: string | null
   readonly ' $refType': 'ArticleItemFragment'
 }
 export type ArticleItemFragment$data = ArticleItemFragment
@@ -50,9 +52,23 @@ const node: ReaderFragment = {
       name: 'date',
       storageKey: null,
     },
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'tags',
+      storageKey: null,
+    },
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'excerpt',
+      storageKey: null,
+    },
   ],
   type: 'Article',
   abstractKey: null,
 }
-;(node as any).hash = '30b237f835607c634309989bbf1d529c'
+;(node as any).hash = 'a89cf4a374de32baf54812aca5736358'
 export default node

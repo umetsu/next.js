@@ -2,7 +2,6 @@
 /* eslint-disable */
 
 import { ConcreteRequest } from 'relay-runtime'
-export type Tag = 'GraphQL' | 'React' | '%future added value'
 export type ArticleQueryVariables = {
   slug?: string | null
 }
@@ -17,7 +16,7 @@ export type ArticleQueryResponse = {
       readonly width: number | null
       readonly height: number | null
     } | null
-    readonly tags: ReadonlyArray<Tag>
+    readonly tags: ReadonlyArray<string>
     readonly excerpt: string | null
     readonly content: string | null
   } | null
