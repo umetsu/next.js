@@ -48,8 +48,7 @@ type Article implements Node {
     slug: String!
     "System stage field"
     stage: Stage!
-    stringTags: [String!]!
-    tags: [Tag!]!
+    tags: [String!]!
     title: String
     "The time the document was updated"
     updatedAt: DateTime!
@@ -518,8 +517,6 @@ enum ArticleOrderByInput {
     publishedAt_DESC
     slug_ASC
     slug_DESC
-    stringTags_ASC
-    stringTags_DESC
     tags_ASC
     tags_DESC
     title_ASC
@@ -712,8 +709,7 @@ input ArticleCreateInput {
     date: Date
     excerpt: String
     slug: String!
-    stringTags: [String!]
-    tags: [Tag!]
+    tags: [String!]
     title: String
     updatedAt: DateTime
 }
@@ -866,25 +862,15 @@ input ArticleManyWhereInput {
     "All values starting with the given string."
     slug_starts_with: String
     "Matches if the field array contains *all* items provided to the filter and order does match"
-    stringTags: [String!]
+    tags: [String!]
     "Matches if the field array contains *all* items provided to the filter"
-    stringTags_contains_all: [String!]
+    tags_contains_all: [String!]
     "Matches if the field array does not contain any of the items provided to the filter"
-    stringTags_contains_none: [String!]
+    tags_contains_none: [String!]
     "Matches if the field array contains at least one item provided to the filter"
-    stringTags_contains_some: [String!]
+    tags_contains_some: [String!]
     "Matches if the field array does not contains *all* items provided to the filter or order does not match"
-    stringTags_not: [String!]
-    "Matches if the field array contains *all* items provided to the filter and order does match"
-    tags: [Tag!]
-    "Matches if the field array contains *all* items provided to the filter"
-    tags_contains_all: [Tag!]
-    "Matches if the field array does not contain any of the items provided to the filter"
-    tags_contains_none: [Tag!]
-    "Matches if the field array contains at least one item provided to the filter"
-    tags_contains_some: [Tag!]
-    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
-    tags_not: [Tag!]
+    tags_not: [String!]
     title: String
     "All values containing the given string."
     title_contains: String
@@ -928,8 +914,7 @@ input ArticleUpdateInput {
     date: Date
     excerpt: String
     slug: String
-    stringTags: [String!]
-    tags: [Tag!]
+    tags: [String!]
     title: String
 }
 
@@ -955,8 +940,7 @@ input ArticleUpdateManyInput {
     createdAt: DateTime
     date: Date
     excerpt: String
-    stringTags: [String!]
-    tags: [Tag!]
+    tags: [String!]
     title: String
     updatedAt: DateTime
 }
@@ -1138,25 +1122,15 @@ input ArticleWhereInput {
     "All values starting with the given string."
     slug_starts_with: String
     "Matches if the field array contains *all* items provided to the filter and order does match"
-    stringTags: [String!]
+    tags: [String!]
     "Matches if the field array contains *all* items provided to the filter"
-    stringTags_contains_all: [String!]
+    tags_contains_all: [String!]
     "Matches if the field array does not contain any of the items provided to the filter"
-    stringTags_contains_none: [String!]
+    tags_contains_none: [String!]
     "Matches if the field array contains at least one item provided to the filter"
-    stringTags_contains_some: [String!]
+    tags_contains_some: [String!]
     "Matches if the field array does not contains *all* items provided to the filter or order does not match"
-    stringTags_not: [String!]
-    "Matches if the field array contains *all* items provided to the filter and order does match"
-    tags: [Tag!]
-    "Matches if the field array contains *all* items provided to the filter"
-    tags_contains_all: [Tag!]
-    "Matches if the field array does not contain any of the items provided to the filter"
-    tags_contains_none: [Tag!]
-    "Matches if the field array contains at least one item provided to the filter"
-    tags_contains_some: [Tag!]
-    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
-    tags_not: [Tag!]
+    tags_not: [String!]
     title: String
     "All values containing the given string."
     title_contains: String
@@ -2103,6 +2077,12 @@ input VersionWhereInput {
 }
 
 
+"Raw JSON value"
+scalar Json
+
+"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long
+
 "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
 scalar DateTime
 
@@ -2111,15 +2091,9 @@ scalar RichTextAST
 
 scalar Hex
 
-scalar RGBATransparency
-
 "A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar."
 scalar Date
 
-"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
-scalar Long
-
 scalar RGBAHue
 
-"Raw JSON value"
-scalar Json
+scalar RGBATransparency
