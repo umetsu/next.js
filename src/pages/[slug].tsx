@@ -1,6 +1,6 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import { parseMarkdown } from '../utils'
 import { initEnvironment } from '../graphql/relay'
 import { fetchQuery } from 'relay-runtime'
