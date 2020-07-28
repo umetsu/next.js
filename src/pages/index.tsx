@@ -32,12 +32,10 @@ type Props = {
   initialRecords?: { [p: string]: Record<any, any> }
 }
 
-export function Home({ articlesQueryResponse }: Props): JSX.Element {
+export default function Home({ articlesQueryResponse }: Props): JSX.Element {
   return (
     <Layout>
       <ArticleList fragmentRef={articlesQueryResponse} />
     </Layout>
   )
 }
-
-export default Home

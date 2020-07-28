@@ -5,7 +5,7 @@ import '../global.css'
 import { useEnvironment } from '../graphql/relay'
 import { RelayEnvironmentProvider } from 'react-relay/hooks'
 
-function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const { initialRecords, ...rest } = pageProps
   const environment = useEnvironment(initialRecords)
 
@@ -23,5 +23,3 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     </RelayEnvironmentProvider>
   )
 }
-
-export default App

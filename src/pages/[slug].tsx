@@ -46,7 +46,7 @@ type Props = {
   initialRecords?: { [p: string]: Record<any, any> }
 }
 
-function ArticleDetailPage({ article }: Props): JSX.Element {
+export default function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
     <Layout>
       <img src={article?.coverImage?.url} />
@@ -64,5 +64,3 @@ function ArticleDetailPage({ article }: Props): JSX.Element {
     </Layout>
   )
 }
-
-export default ArticleDetailPage
