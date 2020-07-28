@@ -1,28 +1,27 @@
 import React from 'react'
-import ArticleItem from './ArticleItem'
-import { graphql } from 'relay-runtime'
-import { ArticleListFragment$key } from '../graphql/__generated__/ArticleListFragment.graphql'
-import { useFragment } from 'react-relay/hooks'
+import ArticleItem, { articleItemFragment } from './ArticleItem'
 import { Grid } from '@material-ui/core'
+import gql from 'graphql-tag'
+import { ArticleListFragment } from '../graphql/generated/types'
 
-const fragmentSpec = graphql`
-  fragment ArticleListFragment on Query {
+export const articleListFragment = gql`
+  fragment ArticleList on Query {
     articles(orderBy: publishedAt_DESC) {
-      ...ArticleItemFragment
+      ...ArticleItem
     }
   }
+  ${articleItemFragment}
 `
 
 type Props = {
-  fragmentRef: ArticleListFragment$key
+  articles: ArticleListFragment['articles']
 }
 
-export default function ArticleList({ fragmentRef }: Props): JSX.Element {
-  const fragment = useFragment(fragmentSpec, fragmentRef)
+export default function ArticleList({ articles }: Props): JSX.Element {
   return (
     <Grid container spacing={2}>
-      {fragment.articles.map((article, index) => (
-        <ArticleItem key={index} fragmentRef={article} />
+      {articles.map((article) => (
+        <ArticleItem key={article.id} article={article} />
       ))}
     </Grid>
   )
