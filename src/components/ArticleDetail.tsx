@@ -1,10 +1,10 @@
 import React from 'react'
-import { graphql, useFragment } from 'react-relay/hooks'
 import { parseMarkdown } from '../utils'
-import { ArticleDetailFragment$key } from '../graphql/__generated__/ArticleDetailFragment.graphql'
+import gql from 'graphql-tag'
+import { ArticleDetailFragment } from '../graphql/generated/types'
 
-const fragmentSpec = graphql`
-  fragment ArticleDetailFragment on Article {
+export const articleDetailFragment = gql`
+  fragment ArticleDetail on Article {
     id
     title
     date
@@ -15,15 +15,14 @@ const fragmentSpec = graphql`
 `
 
 type Props = {
-  fragmentRef: ArticleDetailFragment$key
+  article: ArticleDetailFragment
 }
 
-export default function ArticleDetail({ fragmentRef }: Props): JSX.Element {
-  const article = useFragment(fragmentSpec, fragmentRef)
+export default function ArticleDetail({ article }: Props): JSX.Element {
   return (
     <div>
       <div>{article.title}</div>
-      {typeof article.date === 'string' && <div>{article.date}</div>}
+      <div>{article.date}</div>
       <div>{article.excerpt}</div>
       <div>{article.tags}</div>
       {article.content && (

@@ -1,21 +1,40 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Layout from '../components/Layout'
-import { initEnvironment } from '../graphql/relay'
-import { fetchQuery } from 'relay-runtime'
+import ArticleDetail, {
+  articleDetailFragment,
+} from '../components/ArticleDetail'
+import { Typography } from '@material-ui/core'
+import gql from 'graphql-tag'
+import { fetchQuery } from '../graphql'
 import {
   ArticleQuery,
-  ArticleQueryResponse,
-} from '../graphql/__generated__/ArticleQuery.graphql'
-import { articleQuery } from '../graphql/queries/ArticleQuery'
-import { SlugsQuery } from '../graphql/__generated__/SlugsQuery.graphql'
-import { slugsQuery } from '../graphql/queries/SlugsQuery'
-import ArticleDetail from '../components/ArticleDetail'
-import { Typography } from '@material-ui/core'
+  ArticleQueryVariables,
+  SlugsQuery,
+  SlugsQueryVariables,
+} from '../graphql/generated/types'
+
+export const slugsQuery = gql`
+  query Slugs {
+    articles(orderBy: publishedAt_DESC) {
+      slug
+    }
+  }
+`
+
+export const articleQuery = gql`
+  query Article($slug: String) {
+    article(where: { slug: $slug }) {
+      ...ArticleDetail
+    }
+  }
+  ${articleDetailFragment}
+`
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const environment = initEnvironment()
-  const { articles } = await fetchQuery<SlugsQuery>(environment, slugsQuery, {})
+  const { articles } = await fetchQuery<SlugsQuery, SlugsQueryVariables>(
+    slugsQuery
+  )
 
   return {
     paths: articles.flatMap((a) => ({ params: { slug: a.slug } })),
@@ -26,32 +45,27 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
   params: { slug } = { slug: '' },
 }) => {
-  const environment = initEnvironment()
-  const { article } = await fetchQuery<ArticleQuery>(
-    environment,
+  const { article } = await fetchQuery<ArticleQuery, ArticleQueryVariables>(
     articleQuery,
     { slug }
   )
-  const initialRecords = environment.getStore().getSource().toJSON()
 
   return {
     props: {
       article,
-      initialRecords,
     },
   }
 }
 
 type Props = {
-  article: ArticleQueryResponse['article']
-  initialRecords?: { [p: string]: Record<any, any> }
+  article: ArticleQuery['article']
 }
 
 export default function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
     <Layout>
       {article ? (
-        <ArticleDetail fragmentRef={article} />
+        <ArticleDetail article={article} />
       ) : (
         <Typography>記事の内容を取得できませんでした</Typography>
       )}

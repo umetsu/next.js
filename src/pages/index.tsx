@@ -1,41 +1,42 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
 import Layout from '../components/Layout'
-import { initEnvironment } from '../graphql/relay'
-import { articlesQuery } from '../graphql/queries/ArticlesQuery'
-import { fetchQuery } from 'relay-runtime'
+import ArticleList, { articleListFragment } from '../components/ArticleList'
+import { fetchQuery } from '../graphql'
+import gql from 'graphql-tag'
 import {
   ArticlesQuery,
-  ArticlesQueryResponse,
-} from '../graphql/__generated__/ArticlesQuery.graphql'
-import ArticleList from '../components/ArticleList'
+  ArticlesQueryVariables,
+} from '../graphql/generated/types'
+
+export const articlesQuery = gql`
+  query Articles {
+    ...ArticleList
+  }
+  ${articleListFragment}
+`
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const environment = initEnvironment()
-  const response = await fetchQuery<ArticlesQuery>(
-    environment,
-    articlesQuery,
-    {}
+  const { articles } = await fetchQuery<ArticlesQuery, ArticlesQueryVariables>(
+    articlesQuery
   )
-  const initialRecords = environment.getStore().getSource().toJSON()
 
   return {
     props: {
-      articlesQueryResponse: response,
-      initialRecords,
+      articles,
     },
   }
 }
 
 type Props = {
-  articlesQueryResponse: ArticlesQueryResponse
+  articles: ArticlesQuery['articles']
   initialRecords?: { [p: string]: Record<any, any> }
 }
 
-export default function Home({ articlesQueryResponse }: Props): JSX.Element {
+export default function Home({ articles }: Props): JSX.Element {
   return (
     <Layout>
-      <ArticleList fragmentRef={articlesQueryResponse} />
+      <ArticleList articles={articles} />
     </Layout>
   )
 }
