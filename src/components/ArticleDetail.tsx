@@ -2,14 +2,25 @@ import React from 'react'
 import { parseMarkdown } from '../utils'
 import gql from 'graphql-tag'
 import { ArticleDetailFragment } from '../graphql/generated/types'
+import { createStyles, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    paper: {
+      padding: '16px',
+    },
+    chip: {
+      margin: '8px 8px 0 0',
+    },
+  })
+)
 
 export const articleDetailFragment = gql`
   fragment ArticleDetail on Article {
     id
     title
     date
-    tags
-    excerpt
     content
   }
 `
@@ -19,12 +30,12 @@ type Props = {
 }
 
 export default function ArticleDetail({ article }: Props): JSX.Element {
+  const styles = useStyles()
+
   return (
-    <div>
-      <div>{article.title}</div>
-      <div>{article.date}</div>
-      <div>{article.excerpt}</div>
-      <div>{article.tags}</div>
+    <Paper className={styles.paper}>
+      <Typography variant={'h4'}>{article.title}</Typography>
+      <Typography variant={'body1'}>{article.date}</Typography>
       {article.content && (
         <div
           dangerouslySetInnerHTML={{
@@ -32,6 +43,6 @@ export default function ArticleDetail({ article }: Props): JSX.Element {
           }}
         />
       )}
-    </div>
+    </Paper>
   )
 }

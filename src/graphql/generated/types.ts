@@ -2277,7 +2277,7 @@ export type VersionWhereInput = {
 
 export type ArticleDetailFragment = { __typename?: 'Article' } & Pick<
   Article,
-  'id' | 'title' | 'date' | 'tags' | 'excerpt' | 'content'
+  'id' | 'title' | 'date' | 'content'
 >
 
 export type ArticleItemFragment = { __typename?: 'Article' } & Pick<
