@@ -1,6 +1,6 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import { initEnvironment } from '../graphql/relay'
 import { articlesQuery } from '../graphql/queries/ArticlesQuery'
 import { fetchQuery } from 'relay-runtime'
@@ -32,12 +32,10 @@ type Props = {
   initialRecords?: { [p: string]: Record<any, any> }
 }
 
-export function Home({ articlesQueryResponse }: Props): JSX.Element {
+export default function Home({ articlesQueryResponse }: Props): JSX.Element {
   return (
     <Layout>
       <ArticleList fragmentRef={articlesQueryResponse} />
     </Layout>
   )
 }
-
-export default Home

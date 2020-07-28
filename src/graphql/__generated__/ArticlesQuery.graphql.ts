@@ -34,8 +34,6 @@ fragment ArticleListFragment on Query {
 }
 */
 
-// FIXME: 自動生成されたコードの型が合わない
-// const node: ConcreteRequest = {
 const node = {
   fragment: {
     argumentDefinitions: [],

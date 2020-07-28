@@ -1,7 +1,6 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import Layout from '../components/layout'
-import { parseMarkdown } from '../utils'
+import Layout from '../components/Layout'
 import { initEnvironment } from '../graphql/relay'
 import { fetchQuery } from 'relay-runtime'
 import {
@@ -11,6 +10,8 @@ import {
 import { articleQuery } from '../graphql/queries/ArticleQuery'
 import { SlugsQuery } from '../graphql/__generated__/SlugsQuery.graphql'
 import { slugsQuery } from '../graphql/queries/SlugsQuery'
+import ArticleDetail from '../components/ArticleDetail'
+import { Typography } from '@material-ui/core'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const environment = initEnvironment()
@@ -46,23 +47,14 @@ type Props = {
   initialRecords?: { [p: string]: Record<any, any> }
 }
 
-function ArticleDetailPage({ article }: Props): JSX.Element {
+export default function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
     <Layout>
-      <img src={article?.coverImage?.url} />
-      <div>{article?.title}</div>
-      {typeof article?.date === 'string' && <div>{article.date}</div>}
-      <div>{article?.excerpt}</div>
-      <div>{article?.tags}</div>
-      {article?.content && (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: parseMarkdown(article.content),
-          }}
-        />
+      {article ? (
+        <ArticleDetail fragmentRef={article} />
+      ) : (
+        <Typography>記事の内容を取得できませんでした</Typography>
       )}
     </Layout>
   )
 }
-
-export default ArticleDetailPage
