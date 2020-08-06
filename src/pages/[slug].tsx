@@ -63,12 +63,16 @@ type Props = {
 
 export default function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
-    <Layout>
+    <>
       {article ? (
-        <ArticleDetail article={article} />
+        <Layout title={article.title}>
+          <ArticleDetail article={article} />
+        </Layout>
       ) : (
-        <Typography>記事の内容を取得できませんでした</Typography>
+        <Layout>
+          <Typography>記事の内容を取得できませんでした</Typography>
+        </Layout>
       )}
-    </Layout>
+    </>
   )
 }

@@ -40,15 +40,13 @@ export default function ArticleDetail({ article }: Props): JSX.Element {
       <Typography variant={'body1'} color={'textSecondary'}>
         {article.date}
       </Typography>
-      {article.content && (
-        <Typography color={'textSecondary'}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: parseMarkdown(article.content),
-            }}
-          />
-        </Typography>
-      )}
+      <Typography color={'textSecondary'}>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseMarkdown(article.content),
+          }}
+        />
+      </Typography>
     </Paper>
   )
 }

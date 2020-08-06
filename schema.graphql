@@ -18,9 +18,8 @@ type Aggregate {
 }
 
 type Article implements Node {
-    author: Author
-    content: String
-    coverImage: Asset
+    comment: String
+    content: String!
     "The time the document was created"
     createdAt: DateTime!
     date: Date
@@ -33,7 +32,6 @@ type Article implements Node {
         "Potential stages that should be returned"
         stages: [Stage!]! = [PUBLISHED, DRAFT]
     ): [Article!]!
-    excerpt: String
     "List of Article versions"
     history(
         limit: Int! = 10,
@@ -49,7 +47,7 @@ type Article implements Node {
     "System stage field"
     stage: Stage!
     tags: [String!]!
-    title: String
+    title: String!
     "The time the document was updated"
     updatedAt: DateTime!
 }
@@ -74,7 +72,6 @@ type ArticleEdge {
 "Asset system model"
 type Asset implements Node {
     authorAvatar(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, where: AuthorWhereInput): [Author!]!
-    coverImageArticle(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrderByInput, skip: Int, where: ArticleWhereInput): [Article!]!
     "The time the document was created"
     createdAt(
         "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
@@ -176,7 +173,6 @@ type Author implements Node {
     id: ID!
     name: String
     picture: Asset
-    posts(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrderByInput, skip: Int, where: ArticleWhereInput): [Article!]!
     "The time the document was published. Null on documents in draft stage."
     publishedAt: DateTime
     "System stage field"
@@ -503,14 +499,14 @@ type Version {
 }
 
 enum ArticleOrderByInput {
+    comment_ASC
+    comment_DESC
     content_ASC
     content_DESC
     createdAt_ASC
     createdAt_DESC
     date_ASC
     date_DESC
-    excerpt_ASC
-    excerpt_DESC
     id_ASC
     id_DESC
     publishedAt_ASC
@@ -694,38 +690,15 @@ enum _SystemDateTimeFieldVariation {
     localization
 }
 
-input ArticleConnectInput {
-    "Allow to specify document position in list of connected documents, will default to appending at end of list"
-    position: ConnectPositionInput
-    "Document to connect"
-    where: ArticleWhereUniqueInput!
-}
-
 input ArticleCreateInput {
-    author: AuthorCreateOneInlineInput
-    content: String
-    coverImage: AssetCreateOneInlineInput
+    comment: String
+    content: String!
     createdAt: DateTime
     date: Date
-    excerpt: String
     slug: String!
     tags: [String!]
-    title: String
+    title: String!
     updatedAt: DateTime
-}
-
-input ArticleCreateManyInlineInput {
-    "Connect multiple existing Article documents"
-    connect: [ArticleWhereUniqueInput!]
-    "Create and connect multiple existing Article documents"
-    create: [ArticleCreateInput!]
-}
-
-input ArticleCreateOneInlineInput {
-    "Connect one existing Article document"
-    connect: ArticleWhereUniqueInput
-    "Create and connect one Article document"
-    create: ArticleCreateInput
 }
 
 "Identifies documents"
@@ -738,7 +711,25 @@ input ArticleManyWhereInput {
     OR: [ArticleWhereInput!]
     "Contains search across all appropriate fields."
     _search: String
-    author: AuthorWhereInput
+    comment: String
+    "All values containing the given string."
+    comment_contains: String
+    "All values ending with the given string."
+    comment_ends_with: String
+    "All values that are contained in given list."
+    comment_in: [String!]
+    "All values that are not equal to given value."
+    comment_not: String
+    "All values not containing the given string."
+    comment_not_contains: String
+    "All values not ending with the given string"
+    comment_not_ends_with: String
+    "All values that are not contained in given list."
+    comment_not_in: [String!]
+    "All values not starting with the given string."
+    comment_not_starts_with: String
+    "All values starting with the given string."
+    comment_starts_with: String
     content: String
     "All values containing the given string."
     content_contains: String
@@ -758,7 +749,6 @@ input ArticleManyWhereInput {
     content_not_starts_with: String
     "All values starting with the given string."
     content_starts_with: String
-    coverImage: AssetWhereInput
     createdAt: DateTime
     "All values greater than the given value."
     createdAt_gt: DateTime
@@ -789,25 +779,6 @@ input ArticleManyWhereInput {
     date_not: Date
     "All values that are not contained in given list."
     date_not_in: [Date!]
-    excerpt: String
-    "All values containing the given string."
-    excerpt_contains: String
-    "All values ending with the given string."
-    excerpt_ends_with: String
-    "All values that are contained in given list."
-    excerpt_in: [String!]
-    "All values that are not equal to given value."
-    excerpt_not: String
-    "All values not containing the given string."
-    excerpt_not_contains: String
-    "All values not ending with the given string"
-    excerpt_not_ends_with: String
-    "All values that are not contained in given list."
-    excerpt_not_in: [String!]
-    "All values not starting with the given string."
-    excerpt_not_starts_with: String
-    "All values starting with the given string."
-    excerpt_starts_with: String
     id: ID
     "All values containing the given string."
     id_contains: ID
@@ -908,40 +879,21 @@ input ArticleManyWhereInput {
 }
 
 input ArticleUpdateInput {
-    author: AuthorUpdateOneInlineInput
+    comment: String
     content: String
-    coverImage: AssetUpdateOneInlineInput
     date: Date
-    excerpt: String
     slug: String
     tags: [String!]
     title: String
 }
 
-input ArticleUpdateManyInlineInput {
-    "Connect multiple existing Article documents"
-    connect: [ArticleConnectInput!]
-    "Create and connect multiple Article documents"
-    create: [ArticleCreateInput!]
-    "Delete multiple Article documents"
-    delete: [ArticleWhereUniqueInput!]
-    "Disconnect multiple Article documents"
-    disconnect: [ArticleWhereUniqueInput!]
-    "Override currently-connected documents with multiple existing Article documents"
-    set: [ArticleWhereUniqueInput!]
-    "Update multiple Article documents"
-    update: [ArticleUpdateWithNestedWhereUniqueInput!]
-    "Upsert multiple Article documents"
-    upsert: [ArticleUpsertWithNestedWhereUniqueInput!]
-}
-
 input ArticleUpdateManyInput {
-    content: String
+    comment: String
+    content: String!
     createdAt: DateTime
     date: Date
-    excerpt: String
     tags: [String!]
-    title: String
+    title: String!
     updatedAt: DateTime
 }
 
@@ -950,21 +902,6 @@ input ArticleUpdateManyWithNestedWhereInput {
     data: ArticleUpdateManyInput!
     "Document search"
     where: ArticleWhereInput!
-}
-
-input ArticleUpdateOneInlineInput {
-    "Connect existing Article document"
-    connect: ArticleWhereUniqueInput
-    "Create and connect one Article document"
-    create: ArticleCreateInput
-    "Delete currently connected Article document"
-    delete: Boolean
-    "Disconnect currently connected Article document"
-    disconnect: Boolean
-    "Update single Article document"
-    update: ArticleUpdateWithNestedWhereUniqueInput
-    "Upsert single Article document"
-    upsert: ArticleUpsertWithNestedWhereUniqueInput
 }
 
 input ArticleUpdateWithNestedWhereUniqueInput {
@@ -998,7 +935,25 @@ input ArticleWhereInput {
     OR: [ArticleWhereInput!]
     "Contains search across all appropriate fields."
     _search: String
-    author: AuthorWhereInput
+    comment: String
+    "All values containing the given string."
+    comment_contains: String
+    "All values ending with the given string."
+    comment_ends_with: String
+    "All values that are contained in given list."
+    comment_in: [String!]
+    "All values that are not equal to given value."
+    comment_not: String
+    "All values not containing the given string."
+    comment_not_contains: String
+    "All values not ending with the given string"
+    comment_not_ends_with: String
+    "All values that are not contained in given list."
+    comment_not_in: [String!]
+    "All values not starting with the given string."
+    comment_not_starts_with: String
+    "All values starting with the given string."
+    comment_starts_with: String
     content: String
     "All values containing the given string."
     content_contains: String
@@ -1018,7 +973,6 @@ input ArticleWhereInput {
     content_not_starts_with: String
     "All values starting with the given string."
     content_starts_with: String
-    coverImage: AssetWhereInput
     createdAt: DateTime
     "All values greater than the given value."
     createdAt_gt: DateTime
@@ -1049,25 +1003,6 @@ input ArticleWhereInput {
     date_not: Date
     "All values that are not contained in given list."
     date_not_in: [Date!]
-    excerpt: String
-    "All values containing the given string."
-    excerpt_contains: String
-    "All values ending with the given string."
-    excerpt_ends_with: String
-    "All values that are contained in given list."
-    excerpt_in: [String!]
-    "All values that are not equal to given value."
-    excerpt_not: String
-    "All values not containing the given string."
-    excerpt_not_contains: String
-    "All values not ending with the given string"
-    excerpt_not_ends_with: String
-    "All values that are not contained in given list."
-    excerpt_not_in: [String!]
-    "All values not starting with the given string."
-    excerpt_not_starts_with: String
-    "All values starting with the given string."
-    excerpt_starts_with: String
     id: ID
     "All values containing the given string."
     id_contains: ID
@@ -1182,7 +1117,6 @@ input AssetConnectInput {
 
 input AssetCreateInput {
     authorAvatar: AuthorCreateManyInlineInput
-    coverImageArticle: ArticleCreateManyInlineInput
     createdAt: DateTime
     fileName: String!
     handle: String!
@@ -1244,9 +1178,6 @@ input AssetManyWhereInput {
     authorAvatar_every: AuthorWhereInput
     authorAvatar_none: AuthorWhereInput
     authorAvatar_some: AuthorWhereInput
-    coverImageArticle_every: ArticleWhereInput
-    coverImageArticle_none: ArticleWhereInput
-    coverImageArticle_some: ArticleWhereInput
     createdAt: DateTime
     "All values greater than the given value."
     createdAt_gt: DateTime
@@ -1323,7 +1254,6 @@ input AssetTransformationInput {
 
 input AssetUpdateInput {
     authorAvatar: AuthorUpdateManyInlineInput
-    coverImageArticle: ArticleUpdateManyInlineInput
     fileName: String
     handle: String
     height: Float
@@ -1452,9 +1382,6 @@ input AssetWhereInput {
     authorAvatar_every: AuthorWhereInput
     authorAvatar_none: AuthorWhereInput
     authorAvatar_some: AuthorWhereInput
-    coverImageArticle_every: ArticleWhereInput
-    coverImageArticle_none: ArticleWhereInput
-    coverImageArticle_some: ArticleWhereInput
     createdAt: DateTime
     "All values greater than the given value."
     createdAt_gt: DateTime
@@ -1640,7 +1567,6 @@ input AuthorCreateInput {
     createdAt: DateTime
     name: String
     picture: AssetCreateOneInlineInput
-    posts: ArticleCreateManyInlineInput
     updatedAt: DateTime
 }
 
@@ -1741,9 +1667,6 @@ input AuthorManyWhereInput {
     "All values starting with the given string."
     name_starts_with: String
     picture: AssetWhereInput
-    posts_every: ArticleWhereInput
-    posts_none: ArticleWhereInput
-    posts_some: ArticleWhereInput
     publishedAt: DateTime
     "All values greater than the given value."
     publishedAt_gt: DateTime
@@ -1780,7 +1703,6 @@ input AuthorUpdateInput {
     bibliography: String
     name: String
     picture: AssetUpdateOneInlineInput
-    posts: ArticleUpdateManyInlineInput
 }
 
 input AuthorUpdateManyInlineInput {
@@ -1933,9 +1855,6 @@ input AuthorWhereInput {
     "All values starting with the given string."
     name_starts_with: String
     picture: AssetWhereInput
-    posts_every: ArticleWhereInput
-    posts_none: ArticleWhereInput
-    posts_some: ArticleWhereInput
     publishedAt: DateTime
     "All values greater than the given value."
     publishedAt_gt: DateTime
@@ -2080,16 +1999,13 @@ input VersionWhereInput {
 "Raw JSON value"
 scalar Json
 
-"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
-scalar Long
-
-"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
-scalar DateTime
-
 "Slate-compatible RichText AST"
 scalar RichTextAST
 
 scalar Hex
+
+"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long
 
 "A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar."
 scalar Date
@@ -2097,3 +2013,6 @@ scalar Date
 scalar RGBAHue
 
 scalar RGBATransparency
+
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
+scalar DateTime
