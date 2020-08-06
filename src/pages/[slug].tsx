@@ -63,7 +63,7 @@ type Props = {
 
 export default function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
-    <Layout>
+    <Layout title={article?.title}>
       {article ? (
         <ArticleDetail article={article} />
       ) : (
