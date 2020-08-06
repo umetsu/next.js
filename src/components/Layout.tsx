@@ -6,24 +6,25 @@ const defaultTitle = 'umeg.blog'
 
 type Props = {
   children: React.ReactNode
-  title?: string | null
+  title?: string
 }
 
-export default function Layout({ children, title }: Props): JSX.Element {
-  // non nullに変換
-  const siteTitle = title ?? defaultTitle
+export default function Layout({
+  children,
+  title = defaultTitle,
+}: Props): JSX.Element {
   return (
     <>
       <Head>
-        <title>{siteTitle}</title>
+        <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta
           property="og:image"
           content={`https://og-image.now.sh/${encodeURI(
-            siteTitle
+            title
           )}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fvercel-triangle-black.svg`}
         />
-        <meta name="og:title" content={siteTitle} />
+        <meta name="og:title" content={title} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Container maxWidth={'md'}>

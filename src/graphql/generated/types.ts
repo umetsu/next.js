@@ -1,5 +1,7 @@
 export type Maybe<T> = T | null
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] }
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K]
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -9,17 +11,17 @@ export type Scalars = {
   Float: number
   /** Raw JSON value */
   Json: any
-  /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
-  Long: any
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
-  DateTime: any
   /** Slate-compatible RichText AST */
   RichTextAST: any
   Hex: any
+  /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any
   /** A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar. */
   Date: any
   RGBAHue: any
   RGBATransparency: any
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
+  DateTime: any
 }
 
 /** An object with an ID */
@@ -37,15 +39,13 @@ export type Aggregate = {
 
 export type Article = Node & {
   __typename?: 'Article'
-  author?: Maybe<Author>
-  content?: Maybe<Scalars['String']>
-  coverImage?: Maybe<Asset>
+  comment?: Maybe<Scalars['String']>
+  content: Scalars['String']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
   date?: Maybe<Scalars['Date']>
   /** Get the document in other stages */
   documentInStages: Array<Article>
-  excerpt?: Maybe<Scalars['String']>
   /** List of Article versions */
   history: Array<Version>
   /** The unique identifier */
@@ -56,7 +56,7 @@ export type Article = Node & {
   /** System stage field */
   stage: Stage
   tags: Array<Scalars['String']>
-  title?: Maybe<Scalars['String']>
+  title: Scalars['String']
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
 }
@@ -96,7 +96,6 @@ export type ArticleEdge = {
 export type Asset = Node & {
   __typename?: 'Asset'
   authorAvatar: Array<Author>
-  coverImageArticle: Array<Article>
   /** The time the document was created */
   createdAt: Scalars['DateTime']
   /** Get the document in other stages */
@@ -140,17 +139,6 @@ export type AssetAuthorAvatarArgs = {
   orderBy?: Maybe<AuthorOrderByInput>
   skip?: Maybe<Scalars['Int']>
   where?: Maybe<AuthorWhereInput>
-}
-
-/** Asset system model */
-export type AssetCoverImageArticleArgs = {
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
-  orderBy?: Maybe<ArticleOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  where?: Maybe<ArticleWhereInput>
 }
 
 /** Asset system model */
@@ -225,7 +213,6 @@ export type Author = Node & {
   id: Scalars['ID']
   name?: Maybe<Scalars['String']>
   picture?: Maybe<Asset>
-  posts: Array<Article>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
   /** System stage field */
@@ -244,16 +231,6 @@ export type AuthorHistoryArgs = {
   limit?: Scalars['Int']
   skip?: Scalars['Int']
   stageOverride?: Maybe<Stage>
-}
-
-export type AuthorPostsArgs = {
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
-  orderBy?: Maybe<ArticleOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  where?: Maybe<ArticleWhereInput>
 }
 
 /** A connection to a list of items. */
@@ -703,14 +680,14 @@ export type Version = {
 }
 
 export enum ArticleOrderByInput {
+  CommentAsc = 'comment_ASC',
+  CommentDesc = 'comment_DESC',
   ContentAsc = 'content_ASC',
   ContentDesc = 'content_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DateAsc = 'date_ASC',
   DateDesc = 'date_DESC',
-  ExcerptAsc = 'excerpt_ASC',
-  ExcerptDesc = 'excerpt_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
@@ -894,38 +871,15 @@ export enum _SystemDateTimeFieldVariation {
   Localization = 'localization',
 }
 
-export type ArticleConnectInput = {
-  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
-  position?: Maybe<ConnectPositionInput>
-  /** Document to connect */
-  where: ArticleWhereUniqueInput
-}
-
 export type ArticleCreateInput = {
-  author?: Maybe<AuthorCreateOneInlineInput>
-  content?: Maybe<Scalars['String']>
-  coverImage?: Maybe<AssetCreateOneInlineInput>
+  comment?: Maybe<Scalars['String']>
+  content: Scalars['String']
   createdAt?: Maybe<Scalars['DateTime']>
   date?: Maybe<Scalars['Date']>
-  excerpt?: Maybe<Scalars['String']>
   slug: Scalars['String']
   tags?: Maybe<Array<Scalars['String']>>
-  title?: Maybe<Scalars['String']>
+  title: Scalars['String']
   updatedAt?: Maybe<Scalars['DateTime']>
-}
-
-export type ArticleCreateManyInlineInput = {
-  /** Connect multiple existing Article documents */
-  connect?: Maybe<Array<ArticleWhereUniqueInput>>
-  /** Create and connect multiple existing Article documents */
-  create?: Maybe<Array<ArticleCreateInput>>
-}
-
-export type ArticleCreateOneInlineInput = {
-  /** Connect one existing Article document */
-  connect?: Maybe<ArticleWhereUniqueInput>
-  /** Create and connect one Article document */
-  create?: Maybe<ArticleCreateInput>
 }
 
 /** Identifies documents */
@@ -938,7 +892,25 @@ export type ArticleManyWhereInput = {
   OR?: Maybe<Array<ArticleWhereInput>>
   /** Contains search across all appropriate fields. */
   _search?: Maybe<Scalars['String']>
-  author?: Maybe<AuthorWhereInput>
+  comment?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  comment_contains?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  comment_ends_with?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  comment_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not equal to given value. */
+  comment_not?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  comment_not_contains?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  comment_not_ends_with?: Maybe<Scalars['String']>
+  /** All values that are not contained in given list. */
+  comment_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values not starting with the given string. */
+  comment_not_starts_with?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  comment_starts_with?: Maybe<Scalars['String']>
   content?: Maybe<Scalars['String']>
   /** All values containing the given string. */
   content_contains?: Maybe<Scalars['String']>
@@ -958,7 +930,6 @@ export type ArticleManyWhereInput = {
   content_not_starts_with?: Maybe<Scalars['String']>
   /** All values starting with the given string. */
   content_starts_with?: Maybe<Scalars['String']>
-  coverImage?: Maybe<AssetWhereInput>
   createdAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -989,25 +960,6 @@ export type ArticleManyWhereInput = {
   date_not?: Maybe<Scalars['Date']>
   /** All values that are not contained in given list. */
   date_not_in?: Maybe<Array<Scalars['Date']>>
-  excerpt?: Maybe<Scalars['String']>
-  /** All values containing the given string. */
-  excerpt_contains?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  excerpt_ends_with?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  excerpt_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not equal to given value. */
-  excerpt_not?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  excerpt_not_contains?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  excerpt_not_ends_with?: Maybe<Scalars['String']>
-  /** All values that are not contained in given list. */
-  excerpt_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values not starting with the given string. */
-  excerpt_not_starts_with?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  excerpt_starts_with?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['ID']>
   /** All values containing the given string. */
   id_contains?: Maybe<Scalars['ID']>
@@ -1108,40 +1060,21 @@ export type ArticleManyWhereInput = {
 }
 
 export type ArticleUpdateInput = {
-  author?: Maybe<AuthorUpdateOneInlineInput>
+  comment?: Maybe<Scalars['String']>
   content?: Maybe<Scalars['String']>
-  coverImage?: Maybe<AssetUpdateOneInlineInput>
   date?: Maybe<Scalars['Date']>
-  excerpt?: Maybe<Scalars['String']>
   slug?: Maybe<Scalars['String']>
   tags?: Maybe<Array<Scalars['String']>>
   title?: Maybe<Scalars['String']>
 }
 
-export type ArticleUpdateManyInlineInput = {
-  /** Connect multiple existing Article documents */
-  connect?: Maybe<Array<ArticleConnectInput>>
-  /** Create and connect multiple Article documents */
-  create?: Maybe<Array<ArticleCreateInput>>
-  /** Delete multiple Article documents */
-  delete?: Maybe<Array<ArticleWhereUniqueInput>>
-  /** Disconnect multiple Article documents */
-  disconnect?: Maybe<Array<ArticleWhereUniqueInput>>
-  /** Override currently-connected documents with multiple existing Article documents */
-  set?: Maybe<Array<ArticleWhereUniqueInput>>
-  /** Update multiple Article documents */
-  update?: Maybe<Array<ArticleUpdateWithNestedWhereUniqueInput>>
-  /** Upsert multiple Article documents */
-  upsert?: Maybe<Array<ArticleUpsertWithNestedWhereUniqueInput>>
-}
-
 export type ArticleUpdateManyInput = {
-  content?: Maybe<Scalars['String']>
+  comment?: Maybe<Scalars['String']>
+  content: Scalars['String']
   createdAt?: Maybe<Scalars['DateTime']>
   date?: Maybe<Scalars['Date']>
-  excerpt?: Maybe<Scalars['String']>
   tags?: Maybe<Array<Scalars['String']>>
-  title?: Maybe<Scalars['String']>
+  title: Scalars['String']
   updatedAt?: Maybe<Scalars['DateTime']>
 }
 
@@ -1150,21 +1083,6 @@ export type ArticleUpdateManyWithNestedWhereInput = {
   data: ArticleUpdateManyInput
   /** Document search */
   where: ArticleWhereInput
-}
-
-export type ArticleUpdateOneInlineInput = {
-  /** Connect existing Article document */
-  connect?: Maybe<ArticleWhereUniqueInput>
-  /** Create and connect one Article document */
-  create?: Maybe<ArticleCreateInput>
-  /** Delete currently connected Article document */
-  delete?: Maybe<Scalars['Boolean']>
-  /** Disconnect currently connected Article document */
-  disconnect?: Maybe<Scalars['Boolean']>
-  /** Update single Article document */
-  update?: Maybe<ArticleUpdateWithNestedWhereUniqueInput>
-  /** Upsert single Article document */
-  upsert?: Maybe<ArticleUpsertWithNestedWhereUniqueInput>
 }
 
 export type ArticleUpdateWithNestedWhereUniqueInput = {
@@ -1198,7 +1116,25 @@ export type ArticleWhereInput = {
   OR?: Maybe<Array<ArticleWhereInput>>
   /** Contains search across all appropriate fields. */
   _search?: Maybe<Scalars['String']>
-  author?: Maybe<AuthorWhereInput>
+  comment?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  comment_contains?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  comment_ends_with?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  comment_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not equal to given value. */
+  comment_not?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  comment_not_contains?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  comment_not_ends_with?: Maybe<Scalars['String']>
+  /** All values that are not contained in given list. */
+  comment_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values not starting with the given string. */
+  comment_not_starts_with?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  comment_starts_with?: Maybe<Scalars['String']>
   content?: Maybe<Scalars['String']>
   /** All values containing the given string. */
   content_contains?: Maybe<Scalars['String']>
@@ -1218,7 +1154,6 @@ export type ArticleWhereInput = {
   content_not_starts_with?: Maybe<Scalars['String']>
   /** All values starting with the given string. */
   content_starts_with?: Maybe<Scalars['String']>
-  coverImage?: Maybe<AssetWhereInput>
   createdAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -1249,25 +1184,6 @@ export type ArticleWhereInput = {
   date_not?: Maybe<Scalars['Date']>
   /** All values that are not contained in given list. */
   date_not_in?: Maybe<Array<Scalars['Date']>>
-  excerpt?: Maybe<Scalars['String']>
-  /** All values containing the given string. */
-  excerpt_contains?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  excerpt_ends_with?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  excerpt_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not equal to given value. */
-  excerpt_not?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  excerpt_not_contains?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  excerpt_not_ends_with?: Maybe<Scalars['String']>
-  /** All values that are not contained in given list. */
-  excerpt_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values not starting with the given string. */
-  excerpt_not_starts_with?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  excerpt_starts_with?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['ID']>
   /** All values containing the given string. */
   id_contains?: Maybe<Scalars['ID']>
@@ -1382,7 +1298,6 @@ export type AssetConnectInput = {
 
 export type AssetCreateInput = {
   authorAvatar?: Maybe<AuthorCreateManyInlineInput>
-  coverImageArticle?: Maybe<ArticleCreateManyInlineInput>
   createdAt?: Maybe<Scalars['DateTime']>
   fileName: Scalars['String']
   handle: Scalars['String']
@@ -1444,9 +1359,6 @@ export type AssetManyWhereInput = {
   authorAvatar_every?: Maybe<AuthorWhereInput>
   authorAvatar_none?: Maybe<AuthorWhereInput>
   authorAvatar_some?: Maybe<AuthorWhereInput>
-  coverImageArticle_every?: Maybe<ArticleWhereInput>
-  coverImageArticle_none?: Maybe<ArticleWhereInput>
-  coverImageArticle_some?: Maybe<ArticleWhereInput>
   createdAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -1523,7 +1435,6 @@ export type AssetTransformationInput = {
 
 export type AssetUpdateInput = {
   authorAvatar?: Maybe<AuthorUpdateManyInlineInput>
-  coverImageArticle?: Maybe<ArticleUpdateManyInlineInput>
   fileName?: Maybe<Scalars['String']>
   handle?: Maybe<Scalars['String']>
   height?: Maybe<Scalars['Float']>
@@ -1652,9 +1563,6 @@ export type AssetWhereInput = {
   authorAvatar_every?: Maybe<AuthorWhereInput>
   authorAvatar_none?: Maybe<AuthorWhereInput>
   authorAvatar_some?: Maybe<AuthorWhereInput>
-  coverImageArticle_every?: Maybe<ArticleWhereInput>
-  coverImageArticle_none?: Maybe<ArticleWhereInput>
-  coverImageArticle_some?: Maybe<ArticleWhereInput>
   createdAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -1840,7 +1748,6 @@ export type AuthorCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   name?: Maybe<Scalars['String']>
   picture?: Maybe<AssetCreateOneInlineInput>
-  posts?: Maybe<ArticleCreateManyInlineInput>
   updatedAt?: Maybe<Scalars['DateTime']>
 }
 
@@ -1941,9 +1848,6 @@ export type AuthorManyWhereInput = {
   /** All values starting with the given string. */
   name_starts_with?: Maybe<Scalars['String']>
   picture?: Maybe<AssetWhereInput>
-  posts_every?: Maybe<ArticleWhereInput>
-  posts_none?: Maybe<ArticleWhereInput>
-  posts_some?: Maybe<ArticleWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   publishedAt_gt?: Maybe<Scalars['DateTime']>
@@ -1980,7 +1884,6 @@ export type AuthorUpdateInput = {
   bibliography?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   picture?: Maybe<AssetUpdateOneInlineInput>
-  posts?: Maybe<ArticleUpdateManyInlineInput>
 }
 
 export type AuthorUpdateManyInlineInput = {
@@ -2133,9 +2036,6 @@ export type AuthorWhereInput = {
   /** All values starting with the given string. */
   name_starts_with?: Maybe<Scalars['String']>
   picture?: Maybe<AssetWhereInput>
-  posts_every?: Maybe<ArticleWhereInput>
-  posts_none?: Maybe<ArticleWhereInput>
-  posts_some?: Maybe<ArticleWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   publishedAt_gt?: Maybe<Scalars['DateTime']>
@@ -2282,7 +2182,7 @@ export type ArticleDetailFragment = { __typename?: 'Article' } & Pick<
 
 export type ArticleItemFragment = { __typename?: 'Article' } & Pick<
   Article,
-  'id' | 'slug' | 'title' | 'date' | 'tags' | 'excerpt'
+  'id' | 'slug' | 'title' | 'date' | 'tags' | 'comment'
 >
 
 export type ArticleListFragment = { __typename?: 'Query' } & {

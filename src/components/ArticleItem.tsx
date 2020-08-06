@@ -23,7 +23,7 @@ export const articleItemFragment = gql`
     title
     date
     tags
-    excerpt
+    comment
   }
 `
 
@@ -42,7 +42,7 @@ export default function ArticleItem({ article }: Props): JSX.Element {
               {article.title}
             </Typography>
             <Typography variant={'body1'} color={'textSecondary'}>
-              {article.excerpt}
+              {article.comment}
             </Typography>
             {typeof article.date === 'string' && (
               <Typography variant={'body1'} color={'textSecondary'}>
