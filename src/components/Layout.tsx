@@ -1,6 +1,7 @@
 import React from 'react'
-import { Container } from '@material-ui/core'
+import { AppBar, Container, Toolbar, Typography } from '@material-ui/core'
 import Head from 'next/head'
+import Link from 'next/link'
 
 const defaultTitle = 'umeg.blog'
 
@@ -27,7 +28,18 @@ export default function Layout({
         <meta name="og:title" content={title} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <Container maxWidth={'md'}>
+      <AppBar position="static">
+        <Toolbar>
+          <Link href={'/'}>
+            <a>
+              <Typography variant="h6" style={{ color: '#f9f9f9' }}>
+                umeg.blog
+              </Typography>
+            </a>
+          </Link>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth={'md'} style={{ marginTop: '16px' }}>
         <>{children}</>
       </Container>
     </>
