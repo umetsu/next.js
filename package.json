@@ -57,7 +57,7 @@
     "@types/jest": "26.0.9",
     "@types/marked": "1.1.0",
     "@types/node": "13.13.15",
-    "@types/react": "16.9.44",
+    "@types/react": "16.9.46",
     "@types/sanitize-html": "1.23.3",
     "@types/testing-library__react": "10.2.0",
     "@typescript-eslint/eslint-plugin": "3.8.0",
