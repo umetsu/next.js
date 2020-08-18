@@ -6,21 +6,25 @@ import { ThemeProvider } from '@material-ui/styles'
 import { theme } from '../theme'
 
 const defaultTitle = 'umeg.blog'
+const defaultComment = 'はじめまして呑兵衛です。プログラムとかやってます。'
 
 type Props = {
   children: React.ReactNode
   title?: string
+  comment?: string
 }
 
 export default function Layout({
   children,
   title = defaultTitle,
+  comment = defaultComment,
 }: Props): JSX.Element {
   return (
     <>
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content={comment} />
         <meta
           property="og:image"
           content={`https://og-image.now.sh/${encodeURI(
