@@ -9,19 +9,19 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  /** Raw JSON value */
-  Json: any
-  /** Slate-compatible RichText AST */
-  RichTextAST: any
   Hex: any
-  /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
-  Long: any
   /** A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar. */
   Date: any
-  RGBAHue: any
   RGBATransparency: any
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
   DateTime: any
+  RGBAHue: any
+  /** Slate-compatible RichText AST */
+  RichTextAST: any
+  /** Raw JSON value */
+  Json: any
+  /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any
 }
 
 /** An object with an ID */
@@ -39,7 +39,7 @@ export type Aggregate = {
 
 export type Article = Node & {
   __typename?: 'Article'
-  comment?: Maybe<Scalars['String']>
+  comment: Scalars['String']
   content: Scalars['String']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
@@ -95,7 +95,6 @@ export type ArticleEdge = {
 /** Asset system model */
 export type Asset = Node & {
   __typename?: 'Asset'
-  authorAvatar: Array<Author>
   /** The time the document was created */
   createdAt: Scalars['DateTime']
   /** Get the document in other stages */
@@ -128,17 +127,6 @@ export type Asset = Node & {
   url: Scalars['String']
   /** The file width */
   width?: Maybe<Scalars['Float']>
-}
-
-/** Asset system model */
-export type AssetAuthorAvatarArgs = {
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
-  orderBy?: Maybe<AuthorOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  where?: Maybe<AuthorWhereInput>
 }
 
 /** Asset system model */
@@ -200,58 +188,6 @@ export type AssetEdge = {
   node: Asset
 }
 
-export type Author = Node & {
-  __typename?: 'Author'
-  bibliography?: Maybe<Scalars['String']>
-  /** The time the document was created */
-  createdAt: Scalars['DateTime']
-  /** Get the document in other stages */
-  documentInStages: Array<Author>
-  /** List of Author versions */
-  history: Array<Version>
-  /** The unique identifier */
-  id: Scalars['ID']
-  name?: Maybe<Scalars['String']>
-  picture?: Maybe<Asset>
-  /** The time the document was published. Null on documents in draft stage. */
-  publishedAt?: Maybe<Scalars['DateTime']>
-  /** System stage field */
-  stage: Stage
-  /** The time the document was updated */
-  updatedAt: Scalars['DateTime']
-}
-
-export type AuthorDocumentInStagesArgs = {
-  includeCurrent?: Scalars['Boolean']
-  inheritLocale?: Scalars['Boolean']
-  stages?: Array<Stage>
-}
-
-export type AuthorHistoryArgs = {
-  limit?: Scalars['Int']
-  skip?: Scalars['Int']
-  stageOverride?: Maybe<Stage>
-}
-
-/** A connection to a list of items. */
-export type AuthorConnection = {
-  __typename?: 'AuthorConnection'
-  aggregate: Aggregate
-  /** A list of edges. */
-  edges: Array<AuthorEdge>
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo
-}
-
-/** An edge in a connection. */
-export type AuthorEdge = {
-  __typename?: 'AuthorEdge'
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']
-  /** The item at the end of the edge. */
-  node: Author
-}
-
 export type BatchPayload = {
   __typename?: 'BatchPayload'
   /** The number of nodes that have been affected by the Batch operation. */
@@ -297,62 +233,42 @@ export type Mutation = {
    * @deprecated Asset mutations will be overhauled soon
    */
   createAsset?: Maybe<Asset>
-  /** Create one author */
-  createAuthor?: Maybe<Author>
   /** Delete one article from _all_ existing stages. Returns deleted document. */
   deleteArticle?: Maybe<Article>
   /** Delete one asset from _all_ existing stages. Returns deleted document. */
   deleteAsset?: Maybe<Asset>
-  /** Delete one author from _all_ existing stages. Returns deleted document. */
-  deleteAuthor?: Maybe<Author>
   /** Delete many Article documents */
   deleteManyArticles: BatchPayload
   /** Delete many Asset documents */
   deleteManyAssets: BatchPayload
-  /** Delete many Author documents */
-  deleteManyAuthors: BatchPayload
   /** Publish one article */
   publishArticle?: Maybe<Article>
   /** Publish one asset */
   publishAsset?: Maybe<Asset>
-  /** Publish one author */
-  publishAuthor?: Maybe<Author>
   /** Publish many Article documents */
   publishManyArticles: BatchPayload
   /** Publish many Asset documents */
   publishManyAssets: BatchPayload
-  /** Publish many Author documents */
-  publishManyAuthors: BatchPayload
   /** Unpublish one article from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishArticle?: Maybe<Article>
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishAsset?: Maybe<Asset>
-  /** Unpublish one author from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
-  unpublishAuthor?: Maybe<Author>
   /** Unpublish many Article documents */
   unpublishManyArticles: BatchPayload
   /** Unpublish many Asset documents */
   unpublishManyAssets: BatchPayload
-  /** Unpublish many Author documents */
-  unpublishManyAuthors: BatchPayload
   /** Update one article */
   updateArticle?: Maybe<Article>
   /** Update one asset */
   updateAsset?: Maybe<Asset>
-  /** Update one author */
-  updateAuthor?: Maybe<Author>
   /** Update many articles */
   updateManyArticles: BatchPayload
   /** Update many assets */
   updateManyAssets: BatchPayload
-  /** Update many authors */
-  updateManyAuthors: BatchPayload
   /** Upsert one article */
   upsertArticle?: Maybe<Article>
   /** Upsert one asset */
   upsertAsset?: Maybe<Asset>
-  /** Upsert one author */
-  upsertAuthor?: Maybe<Author>
 }
 
 export type MutationCreateArticleArgs = {
@@ -363,10 +279,6 @@ export type MutationCreateAssetArgs = {
   data: AssetCreateInput
 }
 
-export type MutationCreateAuthorArgs = {
-  data: AuthorCreateInput
-}
-
 export type MutationDeleteArticleArgs = {
   where: ArticleWhereUniqueInput
 }
@@ -375,20 +287,12 @@ export type MutationDeleteAssetArgs = {
   where: AssetWhereUniqueInput
 }
 
-export type MutationDeleteAuthorArgs = {
-  where: AuthorWhereUniqueInput
-}
-
 export type MutationDeleteManyArticlesArgs = {
   where?: Maybe<ArticleManyWhereInput>
 }
 
 export type MutationDeleteManyAssetsArgs = {
   where?: Maybe<AssetManyWhereInput>
-}
-
-export type MutationDeleteManyAuthorsArgs = {
-  where?: Maybe<AuthorManyWhereInput>
 }
 
 export type MutationPublishArticleArgs = {
@@ -403,11 +307,6 @@ export type MutationPublishAssetArgs = {
   where: AssetWhereUniqueInput
 }
 
-export type MutationPublishAuthorArgs = {
-  to?: Array<Stage>
-  where: AuthorWhereUniqueInput
-}
-
 export type MutationPublishManyArticlesArgs = {
   to?: Array<Stage>
   where?: Maybe<ArticleManyWhereInput>
@@ -418,11 +317,6 @@ export type MutationPublishManyAssetsArgs = {
   publishBase?: Maybe<Scalars['Boolean']>
   to?: Array<Stage>
   where?: Maybe<AssetManyWhereInput>
-}
-
-export type MutationPublishManyAuthorsArgs = {
-  to?: Array<Stage>
-  where?: Maybe<AuthorManyWhereInput>
 }
 
 export type MutationUnpublishArticleArgs = {
@@ -437,11 +331,6 @@ export type MutationUnpublishAssetArgs = {
   where: AssetWhereUniqueInput
 }
 
-export type MutationUnpublishAuthorArgs = {
-  from?: Array<Stage>
-  where: AuthorWhereUniqueInput
-}
-
 export type MutationUnpublishManyArticlesArgs = {
   from?: Array<Stage>
   where?: Maybe<ArticleManyWhereInput>
@@ -454,11 +343,6 @@ export type MutationUnpublishManyAssetsArgs = {
   where?: Maybe<AssetManyWhereInput>
 }
 
-export type MutationUnpublishManyAuthorsArgs = {
-  from?: Array<Stage>
-  where?: Maybe<AuthorManyWhereInput>
-}
-
 export type MutationUpdateArticleArgs = {
   data: ArticleUpdateInput
   where: ArticleWhereUniqueInput
@@ -467,11 +351,6 @@ export type MutationUpdateArticleArgs = {
 export type MutationUpdateAssetArgs = {
   data: AssetUpdateInput
   where: AssetWhereUniqueInput
-}
-
-export type MutationUpdateAuthorArgs = {
-  data: AuthorUpdateInput
-  where: AuthorWhereUniqueInput
 }
 
 export type MutationUpdateManyArticlesArgs = {
@@ -484,11 +363,6 @@ export type MutationUpdateManyAssetsArgs = {
   where?: Maybe<AssetManyWhereInput>
 }
 
-export type MutationUpdateManyAuthorsArgs = {
-  data: AuthorUpdateManyInput
-  where?: Maybe<AuthorManyWhereInput>
-}
-
 export type MutationUpsertArticleArgs = {
   upsert: ArticleUpsertInput
   where: ArticleWhereUniqueInput
@@ -497,11 +371,6 @@ export type MutationUpsertArticleArgs = {
 export type MutationUpsertAssetArgs = {
   upsert: AssetUpsertInput
   where: AssetWhereUniqueInput
-}
-
-export type MutationUpsertAuthorArgs = {
-  upsert: AuthorUpsertInput
-  where: AuthorWhereUniqueInput
 }
 
 /** Information about pagination in a connection. */
@@ -535,14 +404,6 @@ export type Query = {
   assets: Array<Asset>
   /** Retrieve multiple assets using the Relay connection interface */
   assetsConnection: AssetConnection
-  /** Retrieve a single author */
-  author?: Maybe<Author>
-  /** Retrieve document version */
-  authorVersion?: Maybe<DocumentVersion>
-  /** Retrieve multiple authors */
-  authors: Array<Author>
-  /** Retrieve multiple authors using the Relay connection interface */
-  authorsConnection: AuthorConnection
   /** Fetches an object given its ID */
   node?: Maybe<Node>
 }
@@ -610,37 +471,6 @@ export type QueryAssetsConnectionArgs = {
   skip?: Maybe<Scalars['Int']>
   stage?: Stage
   where?: Maybe<AssetWhereInput>
-}
-
-export type QueryAuthorArgs = {
-  stage?: Stage
-  where: AuthorWhereUniqueInput
-}
-
-export type QueryAuthorVersionArgs = {
-  where: VersionWhereInput
-}
-
-export type QueryAuthorsArgs = {
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
-  orderBy?: Maybe<AuthorOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  stage?: Stage
-  where?: Maybe<AuthorWhereInput>
-}
-
-export type QueryAuthorsConnectionArgs = {
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
-  orderBy?: Maybe<AuthorOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  stage?: Stage
-  where?: Maybe<AuthorWhereInput>
 }
 
 export type QueryNodeArgs = {
@@ -723,21 +553,6 @@ export enum AssetOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC',
   WidthAsc = 'width_ASC',
   WidthDesc = 'width_DESC',
-}
-
-export enum AuthorOrderByInput {
-  BibliographyAsc = 'bibliography_ASC',
-  BibliographyDesc = 'bibliography_DESC',
-  CreatedAtAsc = 'createdAt_ASC',
-  CreatedAtDesc = 'createdAt_DESC',
-  IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC',
-  NameAsc = 'name_ASC',
-  NameDesc = 'name_DESC',
-  PublishedAtAsc = 'publishedAt_ASC',
-  PublishedAtDesc = 'publishedAt_DESC',
-  UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC',
 }
 
 export enum DocumentFileTypes {
@@ -872,7 +687,7 @@ export enum _SystemDateTimeFieldVariation {
 }
 
 export type ArticleCreateInput = {
-  comment?: Maybe<Scalars['String']>
+  comment: Scalars['String']
   content: Scalars['String']
   createdAt?: Maybe<Scalars['DateTime']>
   date?: Maybe<Scalars['Date']>
@@ -1069,7 +884,7 @@ export type ArticleUpdateInput = {
 }
 
 export type ArticleUpdateManyInput = {
-  comment?: Maybe<Scalars['String']>
+  comment: Scalars['String']
   content: Scalars['String']
   createdAt?: Maybe<Scalars['DateTime']>
   date?: Maybe<Scalars['Date']>
@@ -1289,15 +1104,7 @@ export type ArticleWhereUniqueInput = {
   slug?: Maybe<Scalars['String']>
 }
 
-export type AssetConnectInput = {
-  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
-  position?: Maybe<ConnectPositionInput>
-  /** Document to connect */
-  where: AssetWhereUniqueInput
-}
-
 export type AssetCreateInput = {
-  authorAvatar?: Maybe<AuthorCreateManyInlineInput>
   createdAt?: Maybe<Scalars['DateTime']>
   fileName: Scalars['String']
   handle: Scalars['String']
@@ -1332,20 +1139,6 @@ export type AssetCreateLocalizationsInput = {
   create?: Maybe<Array<AssetCreateLocalizationInput>>
 }
 
-export type AssetCreateManyInlineInput = {
-  /** Connect multiple existing Asset documents */
-  connect?: Maybe<Array<AssetWhereUniqueInput>>
-  /** Create and connect multiple existing Asset documents */
-  create?: Maybe<Array<AssetCreateInput>>
-}
-
-export type AssetCreateOneInlineInput = {
-  /** Connect one existing Asset document */
-  connect?: Maybe<AssetWhereUniqueInput>
-  /** Create and connect one Asset document */
-  create?: Maybe<AssetCreateInput>
-}
-
 /** Identifies documents */
 export type AssetManyWhereInput = {
   /** Logical AND on all given filters. */
@@ -1356,9 +1149,6 @@ export type AssetManyWhereInput = {
   OR?: Maybe<Array<AssetWhereInput>>
   /** Contains search across all appropriate fields. */
   _search?: Maybe<Scalars['String']>
-  authorAvatar_every?: Maybe<AuthorWhereInput>
-  authorAvatar_none?: Maybe<AuthorWhereInput>
-  authorAvatar_some?: Maybe<AuthorWhereInput>
   createdAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -1434,7 +1224,6 @@ export type AssetTransformationInput = {
 }
 
 export type AssetUpdateInput = {
-  authorAvatar?: Maybe<AuthorUpdateManyInlineInput>
   fileName?: Maybe<Scalars['String']>
   handle?: Maybe<Scalars['String']>
   height?: Maybe<Scalars['Float']>
@@ -1469,23 +1258,6 @@ export type AssetUpdateLocalizationsInput = {
   upsert?: Maybe<Array<AssetUpsertLocalizationInput>>
 }
 
-export type AssetUpdateManyInlineInput = {
-  /** Connect multiple existing Asset documents */
-  connect?: Maybe<Array<AssetConnectInput>>
-  /** Create and connect multiple Asset documents */
-  create?: Maybe<Array<AssetCreateInput>>
-  /** Delete multiple Asset documents */
-  delete?: Maybe<Array<AssetWhereUniqueInput>>
-  /** Disconnect multiple Asset documents */
-  disconnect?: Maybe<Array<AssetWhereUniqueInput>>
-  /** Override currently-connected documents with multiple existing Asset documents */
-  set?: Maybe<Array<AssetWhereUniqueInput>>
-  /** Update multiple Asset documents */
-  update?: Maybe<Array<AssetUpdateWithNestedWhereUniqueInput>>
-  /** Upsert multiple Asset documents */
-  upsert?: Maybe<Array<AssetUpsertWithNestedWhereUniqueInput>>
-}
-
 export type AssetUpdateManyInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   /** Optional updates to localizations */
@@ -1506,21 +1278,6 @@ export type AssetUpdateManyWithNestedWhereInput = {
   data: AssetUpdateManyInput
   /** Document search */
   where: AssetWhereInput
-}
-
-export type AssetUpdateOneInlineInput = {
-  /** Connect existing Asset document */
-  connect?: Maybe<AssetWhereUniqueInput>
-  /** Create and connect one Asset document */
-  create?: Maybe<AssetCreateInput>
-  /** Delete currently connected Asset document */
-  delete?: Maybe<Scalars['Boolean']>
-  /** Disconnect currently connected Asset document */
-  disconnect?: Maybe<Scalars['Boolean']>
-  /** Update single Asset document */
-  update?: Maybe<AssetUpdateWithNestedWhereUniqueInput>
-  /** Upsert single Asset document */
-  upsert?: Maybe<AssetUpsertWithNestedWhereUniqueInput>
 }
 
 export type AssetUpdateWithNestedWhereUniqueInput = {
@@ -1560,9 +1317,6 @@ export type AssetWhereInput = {
   OR?: Maybe<Array<AssetWhereInput>>
   /** Contains search across all appropriate fields. */
   _search?: Maybe<Scalars['String']>
-  authorAvatar_every?: Maybe<AuthorWhereInput>
-  authorAvatar_none?: Maybe<AuthorWhereInput>
-  authorAvatar_some?: Maybe<AuthorWhereInput>
   createdAt?: Maybe<Scalars['DateTime']>
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -1736,343 +1490,6 @@ export type AssetWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
-export type AuthorConnectInput = {
-  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
-  position?: Maybe<ConnectPositionInput>
-  /** Document to connect */
-  where: AuthorWhereUniqueInput
-}
-
-export type AuthorCreateInput = {
-  bibliography?: Maybe<Scalars['String']>
-  createdAt?: Maybe<Scalars['DateTime']>
-  name?: Maybe<Scalars['String']>
-  picture?: Maybe<AssetCreateOneInlineInput>
-  updatedAt?: Maybe<Scalars['DateTime']>
-}
-
-export type AuthorCreateManyInlineInput = {
-  /** Connect multiple existing Author documents */
-  connect?: Maybe<Array<AuthorWhereUniqueInput>>
-  /** Create and connect multiple existing Author documents */
-  create?: Maybe<Array<AuthorCreateInput>>
-}
-
-export type AuthorCreateOneInlineInput = {
-  /** Connect one existing Author document */
-  connect?: Maybe<AuthorWhereUniqueInput>
-  /** Create and connect one Author document */
-  create?: Maybe<AuthorCreateInput>
-}
-
-/** Identifies documents */
-export type AuthorManyWhereInput = {
-  /** Logical AND on all given filters. */
-  AND?: Maybe<Array<AuthorWhereInput>>
-  /** Logical NOT on all given filters combined by AND. */
-  NOT?: Maybe<Array<AuthorWhereInput>>
-  /** Logical OR on all given filters. */
-  OR?: Maybe<Array<AuthorWhereInput>>
-  /** Contains search across all appropriate fields. */
-  _search?: Maybe<Scalars['String']>
-  bibliography?: Maybe<Scalars['String']>
-  /** All values containing the given string. */
-  bibliography_contains?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  bibliography_ends_with?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  bibliography_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not equal to given value. */
-  bibliography_not?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  bibliography_not_contains?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  bibliography_not_ends_with?: Maybe<Scalars['String']>
-  /** All values that are not contained in given list. */
-  bibliography_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values not starting with the given string. */
-  bibliography_not_starts_with?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  bibliography_starts_with?: Maybe<Scalars['String']>
-  createdAt?: Maybe<Scalars['DateTime']>
-  /** All values greater than the given value. */
-  createdAt_gt?: Maybe<Scalars['DateTime']>
-  /** All values greater than or equal the given value. */
-  createdAt_gte?: Maybe<Scalars['DateTime']>
-  /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
-  /** All values less than the given value. */
-  createdAt_lt?: Maybe<Scalars['DateTime']>
-  /** All values less than or equal the given value. */
-  createdAt_lte?: Maybe<Scalars['DateTime']>
-  /** All values that are not equal to given value. */
-  createdAt_not?: Maybe<Scalars['DateTime']>
-  /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
-  id?: Maybe<Scalars['ID']>
-  /** All values containing the given string. */
-  id_contains?: Maybe<Scalars['ID']>
-  /** All values ending with the given string. */
-  id_ends_with?: Maybe<Scalars['ID']>
-  /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>
-  /** All values that are not equal to given value. */
-  id_not?: Maybe<Scalars['ID']>
-  /** All values not containing the given string. */
-  id_not_contains?: Maybe<Scalars['ID']>
-  /** All values not ending with the given string */
-  id_not_ends_with?: Maybe<Scalars['ID']>
-  /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>
-  /** All values not starting with the given string. */
-  id_not_starts_with?: Maybe<Scalars['ID']>
-  /** All values starting with the given string. */
-  id_starts_with?: Maybe<Scalars['ID']>
-  name?: Maybe<Scalars['String']>
-  /** All values containing the given string. */
-  name_contains?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  name_ends_with?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  name_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not equal to given value. */
-  name_not?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  name_not_contains?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  name_not_ends_with?: Maybe<Scalars['String']>
-  /** All values that are not contained in given list. */
-  name_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values not starting with the given string. */
-  name_not_starts_with?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  name_starts_with?: Maybe<Scalars['String']>
-  picture?: Maybe<AssetWhereInput>
-  publishedAt?: Maybe<Scalars['DateTime']>
-  /** All values greater than the given value. */
-  publishedAt_gt?: Maybe<Scalars['DateTime']>
-  /** All values greater than or equal the given value. */
-  publishedAt_gte?: Maybe<Scalars['DateTime']>
-  /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
-  /** All values less than the given value. */
-  publishedAt_lt?: Maybe<Scalars['DateTime']>
-  /** All values less than or equal the given value. */
-  publishedAt_lte?: Maybe<Scalars['DateTime']>
-  /** All values that are not equal to given value. */
-  publishedAt_not?: Maybe<Scalars['DateTime']>
-  /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
-  updatedAt?: Maybe<Scalars['DateTime']>
-  /** All values greater than the given value. */
-  updatedAt_gt?: Maybe<Scalars['DateTime']>
-  /** All values greater than or equal the given value. */
-  updatedAt_gte?: Maybe<Scalars['DateTime']>
-  /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
-  /** All values less than the given value. */
-  updatedAt_lt?: Maybe<Scalars['DateTime']>
-  /** All values less than or equal the given value. */
-  updatedAt_lte?: Maybe<Scalars['DateTime']>
-  /** All values that are not equal to given value. */
-  updatedAt_not?: Maybe<Scalars['DateTime']>
-  /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
-}
-
-export type AuthorUpdateInput = {
-  bibliography?: Maybe<Scalars['String']>
-  name?: Maybe<Scalars['String']>
-  picture?: Maybe<AssetUpdateOneInlineInput>
-}
-
-export type AuthorUpdateManyInlineInput = {
-  /** Connect multiple existing Author documents */
-  connect?: Maybe<Array<AuthorConnectInput>>
-  /** Create and connect multiple Author documents */
-  create?: Maybe<Array<AuthorCreateInput>>
-  /** Delete multiple Author documents */
-  delete?: Maybe<Array<AuthorWhereUniqueInput>>
-  /** Disconnect multiple Author documents */
-  disconnect?: Maybe<Array<AuthorWhereUniqueInput>>
-  /** Override currently-connected documents with multiple existing Author documents */
-  set?: Maybe<Array<AuthorWhereUniqueInput>>
-  /** Update multiple Author documents */
-  update?: Maybe<Array<AuthorUpdateWithNestedWhereUniqueInput>>
-  /** Upsert multiple Author documents */
-  upsert?: Maybe<Array<AuthorUpsertWithNestedWhereUniqueInput>>
-}
-
-export type AuthorUpdateManyInput = {
-  bibliography?: Maybe<Scalars['String']>
-  createdAt?: Maybe<Scalars['DateTime']>
-  name?: Maybe<Scalars['String']>
-  updatedAt?: Maybe<Scalars['DateTime']>
-}
-
-export type AuthorUpdateManyWithNestedWhereInput = {
-  /** Update many input */
-  data: AuthorUpdateManyInput
-  /** Document search */
-  where: AuthorWhereInput
-}
-
-export type AuthorUpdateOneInlineInput = {
-  /** Connect existing Author document */
-  connect?: Maybe<AuthorWhereUniqueInput>
-  /** Create and connect one Author document */
-  create?: Maybe<AuthorCreateInput>
-  /** Delete currently connected Author document */
-  delete?: Maybe<Scalars['Boolean']>
-  /** Disconnect currently connected Author document */
-  disconnect?: Maybe<Scalars['Boolean']>
-  /** Update single Author document */
-  update?: Maybe<AuthorUpdateWithNestedWhereUniqueInput>
-  /** Upsert single Author document */
-  upsert?: Maybe<AuthorUpsertWithNestedWhereUniqueInput>
-}
-
-export type AuthorUpdateWithNestedWhereUniqueInput = {
-  /** Document to update */
-  data: AuthorUpdateInput
-  /** Unique document search */
-  where: AuthorWhereUniqueInput
-}
-
-export type AuthorUpsertInput = {
-  /** Create document if it didn't exist */
-  create: AuthorCreateInput
-  /** Update document if it exists */
-  update: AuthorUpdateInput
-}
-
-export type AuthorUpsertWithNestedWhereUniqueInput = {
-  /** Upsert data */
-  data: AuthorUpsertInput
-  /** Unique document search */
-  where: AuthorWhereUniqueInput
-}
-
-/** Identifies documents */
-export type AuthorWhereInput = {
-  /** Logical AND on all given filters. */
-  AND?: Maybe<Array<AuthorWhereInput>>
-  /** Logical NOT on all given filters combined by AND. */
-  NOT?: Maybe<Array<AuthorWhereInput>>
-  /** Logical OR on all given filters. */
-  OR?: Maybe<Array<AuthorWhereInput>>
-  /** Contains search across all appropriate fields. */
-  _search?: Maybe<Scalars['String']>
-  bibliography?: Maybe<Scalars['String']>
-  /** All values containing the given string. */
-  bibliography_contains?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  bibliography_ends_with?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  bibliography_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not equal to given value. */
-  bibliography_not?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  bibliography_not_contains?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  bibliography_not_ends_with?: Maybe<Scalars['String']>
-  /** All values that are not contained in given list. */
-  bibliography_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values not starting with the given string. */
-  bibliography_not_starts_with?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  bibliography_starts_with?: Maybe<Scalars['String']>
-  createdAt?: Maybe<Scalars['DateTime']>
-  /** All values greater than the given value. */
-  createdAt_gt?: Maybe<Scalars['DateTime']>
-  /** All values greater than or equal the given value. */
-  createdAt_gte?: Maybe<Scalars['DateTime']>
-  /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
-  /** All values less than the given value. */
-  createdAt_lt?: Maybe<Scalars['DateTime']>
-  /** All values less than or equal the given value. */
-  createdAt_lte?: Maybe<Scalars['DateTime']>
-  /** All values that are not equal to given value. */
-  createdAt_not?: Maybe<Scalars['DateTime']>
-  /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
-  id?: Maybe<Scalars['ID']>
-  /** All values containing the given string. */
-  id_contains?: Maybe<Scalars['ID']>
-  /** All values ending with the given string. */
-  id_ends_with?: Maybe<Scalars['ID']>
-  /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>
-  /** All values that are not equal to given value. */
-  id_not?: Maybe<Scalars['ID']>
-  /** All values not containing the given string. */
-  id_not_contains?: Maybe<Scalars['ID']>
-  /** All values not ending with the given string */
-  id_not_ends_with?: Maybe<Scalars['ID']>
-  /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>
-  /** All values not starting with the given string. */
-  id_not_starts_with?: Maybe<Scalars['ID']>
-  /** All values starting with the given string. */
-  id_starts_with?: Maybe<Scalars['ID']>
-  name?: Maybe<Scalars['String']>
-  /** All values containing the given string. */
-  name_contains?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  name_ends_with?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  name_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not equal to given value. */
-  name_not?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  name_not_contains?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  name_not_ends_with?: Maybe<Scalars['String']>
-  /** All values that are not contained in given list. */
-  name_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values not starting with the given string. */
-  name_not_starts_with?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  name_starts_with?: Maybe<Scalars['String']>
-  picture?: Maybe<AssetWhereInput>
-  publishedAt?: Maybe<Scalars['DateTime']>
-  /** All values greater than the given value. */
-  publishedAt_gt?: Maybe<Scalars['DateTime']>
-  /** All values greater than or equal the given value. */
-  publishedAt_gte?: Maybe<Scalars['DateTime']>
-  /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
-  /** All values less than the given value. */
-  publishedAt_lt?: Maybe<Scalars['DateTime']>
-  /** All values less than or equal the given value. */
-  publishedAt_lte?: Maybe<Scalars['DateTime']>
-  /** All values that are not equal to given value. */
-  publishedAt_not?: Maybe<Scalars['DateTime']>
-  /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
-  updatedAt?: Maybe<Scalars['DateTime']>
-  /** All values greater than the given value. */
-  updatedAt_gt?: Maybe<Scalars['DateTime']>
-  /** All values greater than or equal the given value. */
-  updatedAt_gte?: Maybe<Scalars['DateTime']>
-  /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
-  /** All values less than the given value. */
-  updatedAt_lt?: Maybe<Scalars['DateTime']>
-  /** All values less than or equal the given value. */
-  updatedAt_lte?: Maybe<Scalars['DateTime']>
-  /** All values that are not equal to given value. */
-  updatedAt_not?: Maybe<Scalars['DateTime']>
-  /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
-}
-
-/** References Author record uniquely */
-export type AuthorWhereUniqueInput = {
-  id?: Maybe<Scalars['ID']>
-}
-
 /** Accepts either HEX or RGBA color value. At least one of hex or rgba value should be passed. If both are passed RGBA is used. */
 export type ColorInput = {
   hex?: Maybe<Scalars['Hex']>
@@ -2177,7 +1594,7 @@ export type VersionWhereInput = {
 
 export type ArticleDetailFragment = { __typename?: 'Article' } & Pick<
   Article,
-  'id' | 'title' | 'date' | 'content'
+  'id' | 'title' | 'comment' | 'date' | 'content'
 >
 
 export type ArticleItemFragment = { __typename?: 'Article' } & Pick<
@@ -2230,9 +1647,6 @@ const result: IntrospectionResultData = {
           },
           {
             name: 'Asset',
-          },
-          {
-            name: 'Author',
           },
         ],
       },

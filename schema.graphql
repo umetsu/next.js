@@ -18,7 +18,7 @@ type Aggregate {
 }
 
 type Article implements Node {
-    comment: String
+    comment: String!
     content: String!
     "The time the document was created"
     createdAt: DateTime!
@@ -71,7 +71,6 @@ type ArticleEdge {
 
 "Asset system model"
 type Asset implements Node {
-    authorAvatar(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, where: AuthorWhereInput): [Author!]!
     "The time the document was created"
     createdAt(
         "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
@@ -149,55 +148,6 @@ type AssetEdge {
     node: Asset!
 }
 
-type Author implements Node {
-    bibliography: String
-    "The time the document was created"
-    createdAt: DateTime!
-    "Get the document in other stages"
-    documentInStages(
-        "Decides if the current stage should be included or not"
-        includeCurrent: Boolean! = false,
-        "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
-        inheritLocale: Boolean! = false,
-        "Potential stages that should be returned"
-        stages: [Stage!]! = [PUBLISHED, DRAFT]
-    ): [Author!]!
-    "List of Author versions"
-    history(
-        limit: Int! = 10,
-        skip: Int! = 0,
-        "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
-        stageOverride: Stage
-    ): [Version!]!
-    "The unique identifier"
-    id: ID!
-    name: String
-    picture: Asset
-    "The time the document was published. Null on documents in draft stage."
-    publishedAt: DateTime
-    "System stage field"
-    stage: Stage!
-    "The time the document was updated"
-    updatedAt: DateTime!
-}
-
-"A connection to a list of items."
-type AuthorConnection {
-    aggregate: Aggregate!
-    "A list of edges."
-    edges: [AuthorEdge!]!
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type AuthorEdge {
-    "A cursor for use in pagination."
-    cursor: String!
-    "The item at the end of the edge."
-    node: Author!
-}
-
 type BatchPayload {
     "The number of nodes that have been affected by the Batch operation."
     count: Long!
@@ -230,8 +180,6 @@ type Mutation {
     createArticle(data: ArticleCreateInput!): Article
     "Create one asset"
     createAsset(data: AssetCreateInput!): Asset @deprecated(reason : "Asset mutations will be overhauled soon")
-    "Create one author"
-    createAuthor(data: AuthorCreateInput!): Author
     "Delete one article from _all_ existing stages. Returns deleted document."
     deleteArticle(
         "Document to delete"
@@ -242,11 +190,6 @@ type Mutation {
         "Document to delete"
         where: AssetWhereUniqueInput!
     ): Asset
-    "Delete one author from _all_ existing stages. Returns deleted document."
-    deleteAuthor(
-        "Document to delete"
-        where: AuthorWhereUniqueInput!
-    ): Author
     "Delete many Article documents"
     deleteManyArticles(
         "Documents to delete"
@@ -256,11 +199,6 @@ type Mutation {
     deleteManyAssets(
         "Documents to delete"
         where: AssetManyWhereInput
-    ): BatchPayload!
-    "Delete many Author documents"
-    deleteManyAuthors(
-        "Documents to delete"
-        where: AuthorManyWhereInput
     ): BatchPayload!
     "Publish one article"
     publishArticle(
@@ -280,13 +218,6 @@ type Mutation {
         "Document to publish"
         where: AssetWhereUniqueInput!
     ): Asset
-    "Publish one author"
-    publishAuthor(
-        "Publishing target stage"
-        to: [Stage!]! = [PUBLISHED],
-        "Document to publish"
-        where: AuthorWhereUniqueInput!
-    ): Author
     "Publish many Article documents"
     publishManyArticles(
         "Stages to publish documents to"
@@ -304,13 +235,6 @@ type Mutation {
         to: [Stage!]! = [PUBLISHED],
         "Identifies documents in each stage to be published"
         where: AssetManyWhereInput
-    ): BatchPayload!
-    "Publish many Author documents"
-    publishManyAuthors(
-        "Stages to publish documents to"
-        to: [Stage!]! = [PUBLISHED],
-        "Identifies documents in each stage to be published"
-        where: AuthorManyWhereInput
     ): BatchPayload!
     "Unpublish one article from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
     unpublishArticle(
@@ -330,13 +254,6 @@ type Mutation {
         "Document to unpublish"
         where: AssetWhereUniqueInput!
     ): Asset
-    "Unpublish one author from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
-    unpublishAuthor(
-        "Stages to unpublish document from"
-        from: [Stage!]! = [PUBLISHED],
-        "Document to unpublish"
-        where: AuthorWhereUniqueInput!
-    ): Author
     "Unpublish many Article documents"
     unpublishManyArticles(
         "Stages to unpublish documents from"
@@ -355,19 +272,10 @@ type Mutation {
         "Identifies documents in each stage"
         where: AssetManyWhereInput
     ): BatchPayload!
-    "Unpublish many Author documents"
-    unpublishManyAuthors(
-        "Stages to unpublish documents from"
-        from: [Stage!]! = [PUBLISHED],
-        "Identifies documents in each stage"
-        where: AuthorManyWhereInput
-    ): BatchPayload!
     "Update one article"
     updateArticle(data: ArticleUpdateInput!, where: ArticleWhereUniqueInput!): Article
     "Update one asset"
     updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
-    "Update one author"
-    updateAuthor(data: AuthorUpdateInput!, where: AuthorWhereUniqueInput!): Author
     "Update many articles"
     updateManyArticles(
         "Updates to document content"
@@ -382,19 +290,10 @@ type Mutation {
         "Documents to apply update on"
         where: AssetManyWhereInput
     ): BatchPayload!
-    "Update many authors"
-    updateManyAuthors(
-        "Updates to document content"
-        data: AuthorUpdateManyInput!,
-        "Documents to apply update on"
-        where: AuthorManyWhereInput
-    ): BatchPayload!
     "Upsert one article"
     upsertArticle(upsert: ArticleUpsertInput!, where: ArticleWhereUniqueInput!): Article
     "Upsert one asset"
     upsertAsset(upsert: AssetUpsertInput!, where: AssetWhereUniqueInput!): Asset
-    "Upsert one author"
-    upsertAuthor(upsert: AuthorUpsertInput!, where: AuthorWhereUniqueInput!): Author
 }
 
 "Information about pagination in a connection."
@@ -453,14 +352,6 @@ type Query {
         stage: Stage! = PUBLISHED,
         where: AssetWhereInput
     ): AssetConnection!
-    "Retrieve a single author"
-    author(stage: Stage! = PUBLISHED, where: AuthorWhereUniqueInput!): Author
-    "Retrieve document version"
-    authorVersion(where: VersionWhereInput!): DocumentVersion
-    "Retrieve multiple authors"
-    authors(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: AuthorWhereInput): [Author!]!
-    "Retrieve multiple authors using the Relay connection interface"
-    authorsConnection(after: String, before: String, first: Int, last: Int, orderBy: AuthorOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: AuthorWhereInput): AuthorConnection!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -542,21 +433,6 @@ enum AssetOrderByInput {
     updatedAt_DESC
     width_ASC
     width_DESC
-}
-
-enum AuthorOrderByInput {
-    bibliography_ASC
-    bibliography_DESC
-    createdAt_ASC
-    createdAt_DESC
-    id_ASC
-    id_DESC
-    name_ASC
-    name_DESC
-    publishedAt_ASC
-    publishedAt_DESC
-    updatedAt_ASC
-    updatedAt_DESC
 }
 
 enum DocumentFileTypes {
@@ -691,7 +567,7 @@ enum _SystemDateTimeFieldVariation {
 }
 
 input ArticleCreateInput {
-    comment: String
+    comment: String!
     content: String!
     createdAt: DateTime
     date: Date
@@ -888,7 +764,7 @@ input ArticleUpdateInput {
 }
 
 input ArticleUpdateManyInput {
-    comment: String
+    comment: String!
     content: String!
     createdAt: DateTime
     date: Date
@@ -1108,15 +984,7 @@ input ArticleWhereUniqueInput {
     slug: String
 }
 
-input AssetConnectInput {
-    "Allow to specify document position in list of connected documents, will default to appending at end of list"
-    position: ConnectPositionInput
-    "Document to connect"
-    where: AssetWhereUniqueInput!
-}
-
 input AssetCreateInput {
-    authorAvatar: AuthorCreateManyInlineInput
     createdAt: DateTime
     fileName: String!
     handle: String!
@@ -1151,20 +1019,6 @@ input AssetCreateLocalizationsInput {
     create: [AssetCreateLocalizationInput!]
 }
 
-input AssetCreateManyInlineInput {
-    "Connect multiple existing Asset documents"
-    connect: [AssetWhereUniqueInput!]
-    "Create and connect multiple existing Asset documents"
-    create: [AssetCreateInput!]
-}
-
-input AssetCreateOneInlineInput {
-    "Connect one existing Asset document"
-    connect: AssetWhereUniqueInput
-    "Create and connect one Asset document"
-    create: AssetCreateInput
-}
-
 "Identifies documents"
 input AssetManyWhereInput {
     "Logical AND on all given filters."
@@ -1175,9 +1029,6 @@ input AssetManyWhereInput {
     OR: [AssetWhereInput!]
     "Contains search across all appropriate fields."
     _search: String
-    authorAvatar_every: AuthorWhereInput
-    authorAvatar_none: AuthorWhereInput
-    authorAvatar_some: AuthorWhereInput
     createdAt: DateTime
     "All values greater than the given value."
     createdAt_gt: DateTime
@@ -1253,7 +1104,6 @@ input AssetTransformationInput {
 }
 
 input AssetUpdateInput {
-    authorAvatar: AuthorUpdateManyInlineInput
     fileName: String
     handle: String
     height: Float
@@ -1288,23 +1138,6 @@ input AssetUpdateLocalizationsInput {
     upsert: [AssetUpsertLocalizationInput!]
 }
 
-input AssetUpdateManyInlineInput {
-    "Connect multiple existing Asset documents"
-    connect: [AssetConnectInput!]
-    "Create and connect multiple Asset documents"
-    create: [AssetCreateInput!]
-    "Delete multiple Asset documents"
-    delete: [AssetWhereUniqueInput!]
-    "Disconnect multiple Asset documents"
-    disconnect: [AssetWhereUniqueInput!]
-    "Override currently-connected documents with multiple existing Asset documents"
-    set: [AssetWhereUniqueInput!]
-    "Update multiple Asset documents"
-    update: [AssetUpdateWithNestedWhereUniqueInput!]
-    "Upsert multiple Asset documents"
-    upsert: [AssetUpsertWithNestedWhereUniqueInput!]
-}
-
 input AssetUpdateManyInput {
     createdAt: DateTime
     "Optional updates to localizations"
@@ -1325,21 +1158,6 @@ input AssetUpdateManyWithNestedWhereInput {
     data: AssetUpdateManyInput!
     "Document search"
     where: AssetWhereInput!
-}
-
-input AssetUpdateOneInlineInput {
-    "Connect existing Asset document"
-    connect: AssetWhereUniqueInput
-    "Create and connect one Asset document"
-    create: AssetCreateInput
-    "Delete currently connected Asset document"
-    delete: Boolean
-    "Disconnect currently connected Asset document"
-    disconnect: Boolean
-    "Update single Asset document"
-    update: AssetUpdateWithNestedWhereUniqueInput
-    "Upsert single Asset document"
-    upsert: AssetUpsertWithNestedWhereUniqueInput
 }
 
 input AssetUpdateWithNestedWhereUniqueInput {
@@ -1379,9 +1197,6 @@ input AssetWhereInput {
     OR: [AssetWhereInput!]
     "Contains search across all appropriate fields."
     _search: String
-    authorAvatar_every: AuthorWhereInput
-    authorAvatar_none: AuthorWhereInput
-    authorAvatar_some: AuthorWhereInput
     createdAt: DateTime
     "All values greater than the given value."
     createdAt_gt: DateTime
@@ -1555,343 +1370,6 @@ input AssetWhereUniqueInput {
     id: ID
 }
 
-input AuthorConnectInput {
-    "Allow to specify document position in list of connected documents, will default to appending at end of list"
-    position: ConnectPositionInput
-    "Document to connect"
-    where: AuthorWhereUniqueInput!
-}
-
-input AuthorCreateInput {
-    bibliography: String
-    createdAt: DateTime
-    name: String
-    picture: AssetCreateOneInlineInput
-    updatedAt: DateTime
-}
-
-input AuthorCreateManyInlineInput {
-    "Connect multiple existing Author documents"
-    connect: [AuthorWhereUniqueInput!]
-    "Create and connect multiple existing Author documents"
-    create: [AuthorCreateInput!]
-}
-
-input AuthorCreateOneInlineInput {
-    "Connect one existing Author document"
-    connect: AuthorWhereUniqueInput
-    "Create and connect one Author document"
-    create: AuthorCreateInput
-}
-
-"Identifies documents"
-input AuthorManyWhereInput {
-    "Logical AND on all given filters."
-    AND: [AuthorWhereInput!]
-    "Logical NOT on all given filters combined by AND."
-    NOT: [AuthorWhereInput!]
-    "Logical OR on all given filters."
-    OR: [AuthorWhereInput!]
-    "Contains search across all appropriate fields."
-    _search: String
-    bibliography: String
-    "All values containing the given string."
-    bibliography_contains: String
-    "All values ending with the given string."
-    bibliography_ends_with: String
-    "All values that are contained in given list."
-    bibliography_in: [String!]
-    "All values that are not equal to given value."
-    bibliography_not: String
-    "All values not containing the given string."
-    bibliography_not_contains: String
-    "All values not ending with the given string"
-    bibliography_not_ends_with: String
-    "All values that are not contained in given list."
-    bibliography_not_in: [String!]
-    "All values not starting with the given string."
-    bibliography_not_starts_with: String
-    "All values starting with the given string."
-    bibliography_starts_with: String
-    createdAt: DateTime
-    "All values greater than the given value."
-    createdAt_gt: DateTime
-    "All values greater than or equal the given value."
-    createdAt_gte: DateTime
-    "All values that are contained in given list."
-    createdAt_in: [DateTime!]
-    "All values less than the given value."
-    createdAt_lt: DateTime
-    "All values less than or equal the given value."
-    createdAt_lte: DateTime
-    "All values that are not equal to given value."
-    createdAt_not: DateTime
-    "All values that are not contained in given list."
-    createdAt_not_in: [DateTime!]
-    id: ID
-    "All values containing the given string."
-    id_contains: ID
-    "All values ending with the given string."
-    id_ends_with: ID
-    "All values that are contained in given list."
-    id_in: [ID!]
-    "All values that are not equal to given value."
-    id_not: ID
-    "All values not containing the given string."
-    id_not_contains: ID
-    "All values not ending with the given string"
-    id_not_ends_with: ID
-    "All values that are not contained in given list."
-    id_not_in: [ID!]
-    "All values not starting with the given string."
-    id_not_starts_with: ID
-    "All values starting with the given string."
-    id_starts_with: ID
-    name: String
-    "All values containing the given string."
-    name_contains: String
-    "All values ending with the given string."
-    name_ends_with: String
-    "All values that are contained in given list."
-    name_in: [String!]
-    "All values that are not equal to given value."
-    name_not: String
-    "All values not containing the given string."
-    name_not_contains: String
-    "All values not ending with the given string"
-    name_not_ends_with: String
-    "All values that are not contained in given list."
-    name_not_in: [String!]
-    "All values not starting with the given string."
-    name_not_starts_with: String
-    "All values starting with the given string."
-    name_starts_with: String
-    picture: AssetWhereInput
-    publishedAt: DateTime
-    "All values greater than the given value."
-    publishedAt_gt: DateTime
-    "All values greater than or equal the given value."
-    publishedAt_gte: DateTime
-    "All values that are contained in given list."
-    publishedAt_in: [DateTime!]
-    "All values less than the given value."
-    publishedAt_lt: DateTime
-    "All values less than or equal the given value."
-    publishedAt_lte: DateTime
-    "All values that are not equal to given value."
-    publishedAt_not: DateTime
-    "All values that are not contained in given list."
-    publishedAt_not_in: [DateTime!]
-    updatedAt: DateTime
-    "All values greater than the given value."
-    updatedAt_gt: DateTime
-    "All values greater than or equal the given value."
-    updatedAt_gte: DateTime
-    "All values that are contained in given list."
-    updatedAt_in: [DateTime!]
-    "All values less than the given value."
-    updatedAt_lt: DateTime
-    "All values less than or equal the given value."
-    updatedAt_lte: DateTime
-    "All values that are not equal to given value."
-    updatedAt_not: DateTime
-    "All values that are not contained in given list."
-    updatedAt_not_in: [DateTime!]
-}
-
-input AuthorUpdateInput {
-    bibliography: String
-    name: String
-    picture: AssetUpdateOneInlineInput
-}
-
-input AuthorUpdateManyInlineInput {
-    "Connect multiple existing Author documents"
-    connect: [AuthorConnectInput!]
-    "Create and connect multiple Author documents"
-    create: [AuthorCreateInput!]
-    "Delete multiple Author documents"
-    delete: [AuthorWhereUniqueInput!]
-    "Disconnect multiple Author documents"
-    disconnect: [AuthorWhereUniqueInput!]
-    "Override currently-connected documents with multiple existing Author documents"
-    set: [AuthorWhereUniqueInput!]
-    "Update multiple Author documents"
-    update: [AuthorUpdateWithNestedWhereUniqueInput!]
-    "Upsert multiple Author documents"
-    upsert: [AuthorUpsertWithNestedWhereUniqueInput!]
-}
-
-input AuthorUpdateManyInput {
-    bibliography: String
-    createdAt: DateTime
-    name: String
-    updatedAt: DateTime
-}
-
-input AuthorUpdateManyWithNestedWhereInput {
-    "Update many input"
-    data: AuthorUpdateManyInput!
-    "Document search"
-    where: AuthorWhereInput!
-}
-
-input AuthorUpdateOneInlineInput {
-    "Connect existing Author document"
-    connect: AuthorWhereUniqueInput
-    "Create and connect one Author document"
-    create: AuthorCreateInput
-    "Delete currently connected Author document"
-    delete: Boolean
-    "Disconnect currently connected Author document"
-    disconnect: Boolean
-    "Update single Author document"
-    update: AuthorUpdateWithNestedWhereUniqueInput
-    "Upsert single Author document"
-    upsert: AuthorUpsertWithNestedWhereUniqueInput
-}
-
-input AuthorUpdateWithNestedWhereUniqueInput {
-    "Document to update"
-    data: AuthorUpdateInput!
-    "Unique document search"
-    where: AuthorWhereUniqueInput!
-}
-
-input AuthorUpsertInput {
-    "Create document if it didn't exist"
-    create: AuthorCreateInput!
-    "Update document if it exists"
-    update: AuthorUpdateInput!
-}
-
-input AuthorUpsertWithNestedWhereUniqueInput {
-    "Upsert data"
-    data: AuthorUpsertInput!
-    "Unique document search"
-    where: AuthorWhereUniqueInput!
-}
-
-"Identifies documents"
-input AuthorWhereInput {
-    "Logical AND on all given filters."
-    AND: [AuthorWhereInput!]
-    "Logical NOT on all given filters combined by AND."
-    NOT: [AuthorWhereInput!]
-    "Logical OR on all given filters."
-    OR: [AuthorWhereInput!]
-    "Contains search across all appropriate fields."
-    _search: String
-    bibliography: String
-    "All values containing the given string."
-    bibliography_contains: String
-    "All values ending with the given string."
-    bibliography_ends_with: String
-    "All values that are contained in given list."
-    bibliography_in: [String!]
-    "All values that are not equal to given value."
-    bibliography_not: String
-    "All values not containing the given string."
-    bibliography_not_contains: String
-    "All values not ending with the given string"
-    bibliography_not_ends_with: String
-    "All values that are not contained in given list."
-    bibliography_not_in: [String!]
-    "All values not starting with the given string."
-    bibliography_not_starts_with: String
-    "All values starting with the given string."
-    bibliography_starts_with: String
-    createdAt: DateTime
-    "All values greater than the given value."
-    createdAt_gt: DateTime
-    "All values greater than or equal the given value."
-    createdAt_gte: DateTime
-    "All values that are contained in given list."
-    createdAt_in: [DateTime!]
-    "All values less than the given value."
-    createdAt_lt: DateTime
-    "All values less than or equal the given value."
-    createdAt_lte: DateTime
-    "All values that are not equal to given value."
-    createdAt_not: DateTime
-    "All values that are not contained in given list."
-    createdAt_not_in: [DateTime!]
-    id: ID
-    "All values containing the given string."
-    id_contains: ID
-    "All values ending with the given string."
-    id_ends_with: ID
-    "All values that are contained in given list."
-    id_in: [ID!]
-    "All values that are not equal to given value."
-    id_not: ID
-    "All values not containing the given string."
-    id_not_contains: ID
-    "All values not ending with the given string"
-    id_not_ends_with: ID
-    "All values that are not contained in given list."
-    id_not_in: [ID!]
-    "All values not starting with the given string."
-    id_not_starts_with: ID
-    "All values starting with the given string."
-    id_starts_with: ID
-    name: String
-    "All values containing the given string."
-    name_contains: String
-    "All values ending with the given string."
-    name_ends_with: String
-    "All values that are contained in given list."
-    name_in: [String!]
-    "All values that are not equal to given value."
-    name_not: String
-    "All values not containing the given string."
-    name_not_contains: String
-    "All values not ending with the given string"
-    name_not_ends_with: String
-    "All values that are not contained in given list."
-    name_not_in: [String!]
-    "All values not starting with the given string."
-    name_not_starts_with: String
-    "All values starting with the given string."
-    name_starts_with: String
-    picture: AssetWhereInput
-    publishedAt: DateTime
-    "All values greater than the given value."
-    publishedAt_gt: DateTime
-    "All values greater than or equal the given value."
-    publishedAt_gte: DateTime
-    "All values that are contained in given list."
-    publishedAt_in: [DateTime!]
-    "All values less than the given value."
-    publishedAt_lt: DateTime
-    "All values less than or equal the given value."
-    publishedAt_lte: DateTime
-    "All values that are not equal to given value."
-    publishedAt_not: DateTime
-    "All values that are not contained in given list."
-    publishedAt_not_in: [DateTime!]
-    updatedAt: DateTime
-    "All values greater than the given value."
-    updatedAt_gt: DateTime
-    "All values greater than or equal the given value."
-    updatedAt_gte: DateTime
-    "All values that are contained in given list."
-    updatedAt_in: [DateTime!]
-    "All values less than the given value."
-    updatedAt_lt: DateTime
-    "All values less than or equal the given value."
-    updatedAt_lte: DateTime
-    "All values that are not equal to given value."
-    updatedAt_not: DateTime
-    "All values that are not contained in given list."
-    updatedAt_not_in: [DateTime!]
-}
-
-"References Author record uniquely"
-input AuthorWhereUniqueInput {
-    id: ID
-}
-
 "Accepts either HEX or RGBA color value. At least one of hex or rgba value should be passed. If both are passed RGBA is used."
 input ColorInput {
     hex: Hex
@@ -1996,23 +1474,23 @@ input VersionWhereInput {
 }
 
 
-"Raw JSON value"
-scalar Json
-
-"Slate-compatible RichText AST"
-scalar RichTextAST
-
 scalar Hex
-
-"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
-scalar Long
 
 "A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar."
 scalar Date
-
-scalar RGBAHue
 
 scalar RGBATransparency
 
 "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
 scalar DateTime
+
+scalar RGBAHue
+
+"Slate-compatible RichText AST"
+scalar RichTextAST
+
+"Raw JSON value"
+scalar Json
+
+"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long

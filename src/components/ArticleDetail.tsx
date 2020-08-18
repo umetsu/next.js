@@ -20,6 +20,7 @@ export const articleDetailFragment = gql`
   fragment ArticleDetail on Article {
     id
     title
+    comment
     date
     content
   }
@@ -37,7 +38,10 @@ export default function ArticleDetail({ article }: Props): JSX.Element {
       <Typography variant={'h4'} color={'textSecondary'}>
         {article.title}
       </Typography>
-      <Typography variant={'body1'} color={'textSecondary'}>
+      <Typography variant={'body2'} color={'textSecondary'}>
+        {article.comment}
+      </Typography>
+      <Typography variant={'body2'} color={'textSecondary'}>
         {article.date}
       </Typography>
       <Typography color={'textSecondary'}>
