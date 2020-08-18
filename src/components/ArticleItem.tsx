@@ -38,16 +38,10 @@ export default function ArticleItem({ article }: Props): JSX.Element {
       <Link href={'/[slug]'} as={`/${article.slug}`}>
         <a>
           <Paper className={styles.item}>
-            <Typography variant={'h6'} color={'textSecondary'}>
-              {article.title}
-            </Typography>
-            <Typography variant={'body1'} color={'textSecondary'}>
-              {article.comment}
-            </Typography>
+            <Typography variant={'h6'}>{article.title}</Typography>
+            <Typography variant={'body2'}>{article.comment}</Typography>
             {typeof article.date === 'string' && (
-              <Typography variant={'body1'} color={'textSecondary'}>
-                {article.date}
-              </Typography>
+              <Typography variant={'body2'}>{article.date}</Typography>
             )}
             {article.tags.map((tag, index) => (
               <Chip

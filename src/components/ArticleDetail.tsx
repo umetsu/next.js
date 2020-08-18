@@ -35,16 +35,10 @@ export default function ArticleDetail({ article }: Props): JSX.Element {
 
   return (
     <Paper className={styles.paper}>
-      <Typography variant={'h4'} color={'textSecondary'}>
-        {article.title}
-      </Typography>
-      <Typography variant={'body2'} color={'textSecondary'}>
-        {article.comment}
-      </Typography>
-      <Typography variant={'body2'} color={'textSecondary'}>
-        {article.date}
-      </Typography>
-      <Typography color={'textSecondary'}>
+      <Typography variant={'h4'}>{article.title}</Typography>
+      <Typography variant={'body2'}>{article.comment}</Typography>
+      <Typography variant={'body2'}>{article.date}</Typography>
+      <Typography>
         <div
           dangerouslySetInnerHTML={{
             __html: parseMarkdown(article.content),
