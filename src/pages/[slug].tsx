@@ -65,7 +65,7 @@ export default function ArticleDetailPage({ article }: Props): JSX.Element {
   return (
     <>
       {article ? (
-        <Layout title={article.title}>
+        <Layout title={article.title} comment={article.comment}>
           <ArticleDetail article={article} />
         </Layout>
       ) : (
