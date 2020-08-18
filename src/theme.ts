@@ -4,5 +4,8 @@ import lightGreen from '@material-ui/core/colors/lightGreen'
 export const theme = createMuiTheme({
   palette: {
     primary: lightGreen,
+    text: {
+      primary: '#747474',
+    },
   },
 })
