@@ -42,7 +42,7 @@ export default function Layout({
             </Link>
           </Toolbar>
         </AppBar>
-        <Container maxWidth={'md'} style={{ marginTop: '16px' }}>
+        <Container maxWidth={'md'} style={{ padding: '16px' }}>
           <>{children}</>
         </Container>
       </ThemeProvider>
