@@ -25,6 +25,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     props: {
       articles,
     },
+    revalidate: 10,
   }
 }
 

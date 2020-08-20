@@ -38,7 +38,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: articles.flatMap((a) => ({ params: { slug: a.slug } })),
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -54,6 +54,7 @@ export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
     props: {
       article,
     },
+    revalidate: 10,
   }
 }
 
