@@ -37,7 +37,7 @@
     "next": "9.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "sanitize-html": "1.27.4"
+    "sanitize-html": "1.27.5"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.8",
