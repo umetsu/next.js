@@ -40,7 +40,7 @@
     "sanitize-html": "1.27.5"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.17.9",
+    "@graphql-codegen/cli": "1.17.10",
     "@graphql-codegen/fragment-matcher": "1.17.8",
     "@graphql-codegen/typescript": "1.17.10",
     "@graphql-codegen/typescript-operations": "1.17.8",
