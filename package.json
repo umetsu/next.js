@@ -58,7 +58,7 @@
     "babel-jest": "26.3.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.12.0",
-    "eslint-plugin-react": "7.21.2",
+    "eslint-plugin-react": "7.21.3",
     "husky": "4.3.0",
     "is-ci-cli": "2.1.2",
     "jest": "26.4.2",
