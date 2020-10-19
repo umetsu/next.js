@@ -40,9 +40,9 @@
     "sanitize-html": "1.27.5"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.17.10",
+    "@graphql-codegen/cli": "1.18.0",
     "@graphql-codegen/fragment-matcher": "1.17.8",
-    "@graphql-codegen/typescript": "1.17.10",
+    "@graphql-codegen/typescript": "1.17.11",
     "@graphql-codegen/typescript-operations": "1.17.8",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.1.0",
