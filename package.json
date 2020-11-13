@@ -44,7 +44,7 @@
     "@graphql-codegen/fragment-matcher": "1.17.8",
     "@graphql-codegen/typescript": "1.17.11",
     "@graphql-codegen/typescript-operations": "1.17.9",
-    "@testing-library/jest-dom": "5.11.5",
+    "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.1.2",
     "@types/highlight.js": "9.12.4",
     "@types/jest": "26.0.15",
