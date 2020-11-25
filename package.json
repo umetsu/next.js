@@ -42,8 +42,8 @@
   "devDependencies": {
     "@graphql-codegen/cli": "1.19.2",
     "@graphql-codegen/fragment-matcher": "1.17.8",
-    "@graphql-codegen/typescript": "1.17.11",
-    "@graphql-codegen/typescript-operations": "1.17.10",
+    "@graphql-codegen/typescript": "1.18.0",
+    "@graphql-codegen/typescript-operations": "1.17.11",
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
     "@types/highlight.js": "9.12.4",
