@@ -47,7 +47,7 @@
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "11.2.7",
     "@types/highlight.js": "9.12.4",
-    "@types/jest": "26.0.24",
+    "@types/jest": "27.0.2",
     "@types/marked": "1.2.2",
     "@types/node": "13.13.52",
     "@types/react": "16.14.15",
